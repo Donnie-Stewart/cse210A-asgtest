@@ -1,3 +1,5 @@
+#tokens become elements derived form raw text
+
 
 class Token():
     def __init__(self, type, value):
@@ -15,7 +17,7 @@ class Tonkenizer():
 
 
     def increment(self):
-        #in
+        #moves to the next character in the text
         self.i += 1
         str_len = len(self.text)
         if self.i >= str_len:
@@ -24,6 +26,7 @@ class Tonkenizer():
             self.current_char = self.text[self.i]
 
     def integer(self):
+        #basic form of the numbers (handles multiple digits)
         int1 = ''
         int1 = int1 + self.current_char
         self.increment()
@@ -34,6 +37,7 @@ class Tonkenizer():
         return int(int1)
 
     def create_next_token(self):
+        #iterates to the following item for evaluation
         while self.current_char is not None:
             if self.current_char.isspace():
                 self.increment()
@@ -57,12 +61,14 @@ class Tonkenizer():
 
 
 class Expession():
+    #basic element of the tree
     def __init__(self, e1, type, e2):
         self.e1 = e1
         self.type = type
         self.e2 = e2
 
 class Num():
+    #number element of the tree
     def __init__(self, token):
         self.token = token
         self.value = token.value
