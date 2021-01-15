@@ -1,3 +1,7 @@
+#Donnie Stewart last modified 1/15/21
+#Followed the tutorial https://ruslanspivak.com/lsbasi-part7/ from Ruslan's Blog
+#All the code below draws from insipration in the tutorial 
+
 #tokens become elements derived form raw text
 
 
