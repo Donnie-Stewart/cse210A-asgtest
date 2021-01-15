@@ -1,6 +1,6 @@
 #Donnie Stewart last modified 1/15/21
 #Followed the tutorial https://ruslanspivak.com/lsbasi-part7/ from Ruslan's Blog
-#All the code below draws from insipration in the tutorial 
+#All the code below draws from insipration in the tutorial
 
 #tokens become elements derived form raw text
 
@@ -65,7 +65,7 @@ class Tonkenizer():
 
 
 class Expession():
-    #basic element of the tree
+    #basic element of the tree This becomes the basis for the AST for arith
     def __init__(self, e1, type, e2):
         self.e1 = e1
         self.type = type
