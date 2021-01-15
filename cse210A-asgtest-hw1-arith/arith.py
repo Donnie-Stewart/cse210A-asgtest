@@ -146,11 +146,13 @@ class Interpreter():
     def interpret(self):
         return self.recursive_interpret( self.tree)
 
-text = "'2 + 3 + 4 + -1'"
+while True:
+        try:
+            text = input("")
 
+        except EOFError:
+            break
 toke = Tonkenizer(text)
-
-
 parse = Parser(toke)
 tree = parse.top()
 print(Interpreter(tree).interpret())
