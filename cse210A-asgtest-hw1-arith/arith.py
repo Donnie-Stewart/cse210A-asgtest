@@ -75,26 +75,32 @@ class Num():
         self.type = "Num"
 
 class SumExpr(Expession):
+    #for adding two expressions
     def __init__(self, expr1, expr2):
         super().__init__(expr1, "PLUS", expr2)
 
 class ProdExpr(Expession):
+    #for multiplying two expressions
     def __init__(self, expr1, expr2):
         super().__init__(expr1, "MUL", expr2)
 
 class MinusExpr(Expession):
+    #for subtracting two expressions
     def __init__(self, expr1, expr2):
         super().__init__(expr1, "MINUS", expr2)
 
 class Parser(object):
+    #recieves tokenized texts and parses it into a tree
     def __init__(self, tonkenizer):
         self.tonkenizer = tonkenizer
         # set current token to the first token taken from the input
         self.current_token = self.tonkenizer.create_next_token()
 
     def bottom(self):
+        #most atomic values of the arith language (integers)
         tree = self.current_token
         if tree.value == "-":
+            #handles negative numbers
             self.current_token = self.tonkenizer.create_next_token()
             tree = self.current_token
             tree.value = -tree.value
@@ -114,6 +120,7 @@ class Parser(object):
 
 
     def mid(self):
+        #handles multiplication of numbers, operations that are here have medium importance.
         tree = self.bottom()
         while self.current_token.value == "*":
             self.current_token = self.tonkenizer.create_next_token()
@@ -121,6 +128,7 @@ class Parser(object):
         return tree
 
     def top(self):
+        #handles plus minus, these operations are easy to separate in math and thus are least important
         tree  = self.mid()
         while self.current_token.value in ("+", "-"):
             if self.current_token.value == "+":
@@ -135,10 +143,12 @@ class Parser(object):
 
 
 class Interpreter():
+    #recieves a parsed tree and outputs the result
     def __init__(self, tree):
         self.tree = tree
 
     def recursive_interpret(self, e):
+        #simple recursive function to iterate through the tree
         #print(e.type )
         if e.type == "Num":
             return e.value
@@ -152,12 +162,14 @@ class Interpreter():
     def interpret(self):
         return self.recursive_interpret( self.tree)
 
+#recieves the input from stdin
 while True:
         try:
             text = input("")
 
         except EOFError:
             break
+#calls the necessary functions and releases an output
 toke = Tonkenizer(text)
 parse = Parser(toke)
 tree = parse.top()
