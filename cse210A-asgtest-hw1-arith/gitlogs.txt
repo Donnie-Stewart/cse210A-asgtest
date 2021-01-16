@@ -1,0 +1,65 @@
+commit d805701c85c985c857c6a04a8f06e058c6871512
+Author: Donnie-Stewart <donniestewart14@icloud.com>
+Date:   Fri Jan 15 16:35:32 2021 -0800
+
+    updated readme
+
+commit 9312575a2e8c4d080d6482134e3d5c01794cfd96
+Author: Donnie-Stewart <donniestewart14@icloud.com>
+Date:   Fri Jan 15 16:16:00 2021 -0800
+
+    Tests and readme
+
+commit dd077d2fcfac7795dfe86dcdf699b6e13fe96efa
+Author: Donnie-Stewart <donniestewart14@icloud.com>
+Date:   Fri Jan 15 16:09:51 2021 -0800
+
+    cleaner tests
+
+commit ea00996580fde21bd6c6e3fffd972f8f9e9cd532
+Author: Donnie-Stewart <donniestewart14@icloud.com>
+Date:   Fri Jan 15 16:03:26 2021 -0800
+
+    updated tests
+
+commit 10a0b70879263afb0a3becf9a5c9f038117d81e5
+Author: Donnie-Stewart <donniestewart14@icloud.com>
+Date:   Fri Jan 15 15:53:49 2021 -0800
+
+    ast comment
+
+commit d0813a9a500b1e72e93641b9a466009529df48f6
+Author: Donnie-Stewart <donniestewart14@icloud.com>
+Date:   Fri Jan 15 15:52:17 2021 -0800
+
+    citations
+
+commit 276b339f5d8a3c6e5598a46cc81336a1ae7ab241
+Author: Donnie-Stewart <donniestewart14@icloud.com>
+Date:   Fri Jan 15 15:34:38 2021 -0800
+
+    comments
+
+commit 3df1716e80846d6ba345769d80187c19cb840279
+Author: Donnie-Stewart <donniestewart14@icloud.com>
+Date:   Fri Jan 15 15:27:02 2021 -0800
+
+    cleaner arith
+
+commit b9316abd33ea2c0a43451248ed5266b51850ff84
+Author: Donnie-Stewart <donniestewart14@icloud.com>
+Date:   Fri Jan 15 15:17:06 2021 -0800
+
+    arith takes tests custom cases
+
+commit 2858025b18c9902a96de2f85f2c673f9054c14a7
+Author: Donnie-Stewart <donniestewart14@icloud.com>
+Date:   Fri Jan 15 00:27:58 2021 -0800
+
+    skeleton without tests
+
+commit 4e8b7a0742448cd55e3f0633bda5afa163f63e7a
+Author: Donnie-Stewart <donniestewart14@icloud.com>
+Date:   Wed Jan 13 20:09:05 2021 -0800
+
+    initial ast skeleton
