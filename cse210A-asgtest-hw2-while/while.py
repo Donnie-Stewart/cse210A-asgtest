@@ -287,16 +287,18 @@ class Parser(object):
         return tree
 
     def comparators(self):
-        #handles plus minus, these operations are easy to separate in math and thus are least important
+        #handles <,>,= which have low priority
         tree  = self.top()
-        # while self.current_token.value in ("+", "-"):
-        #     if self.current_token.value == "+":
-        #         self.current_token = self.tonkenizer.create_next_token()
-        #         tree = SumExpr(tree, self.mid())
-        #         #return tree
-        #     if self.current_token.value == "-":
-        #         self.current_token = self.tonkenizer.create_next_token()
-        #         tree = MinusExpr(tree, self.mid())
+        while self.current_token.value in ("<", ">", "="):
+            if self.current_token.value == "<":
+                self.current_token = self.tonkenizer.create_next_token()
+                tree = LessExpr(tree, self.top())
+            if self.current_token.value == ">":
+                self.current_token = self.tonkenizer.create_next_token()
+                tree = MoreExpr(tree, self.top())
+            if self.current_token.value == "=":
+                self.current_token = self.tonkenizer.create_next_token()
+                tree = EqualExpr(tree, self.top())
         return tree
 
     def bools(self):
@@ -318,7 +320,7 @@ class Interpreter():
 
     def recursive_interpret(self, e):
         #simple recursive function to iterate through the tree
-        print(e.type )
+        # print(e.type )
         if e.type == "Num":
             print(e.value)
             return e.value
@@ -331,6 +333,21 @@ class Interpreter():
 
         elif e.type == "BOOL":
             return e.value
+        elif e.type == "EQUAL":
+            x = self.recursive_interpret(e.e1)
+            y =  self.recursive_interpret(e.e2)
+            z = (x == y)
+            return z
+        elif e.type == "LESS":
+            x = self.recursive_interpret(e.e1)
+            y =  self.recursive_interpret(e.e2)
+            z = (x < y)
+            return z
+        elif e.type == "MORE":
+            x = self.recursive_interpret(e.e1)
+            y =  self.recursive_interpret(e.e2)
+            z = (x > y)
+            return z
         elif e.type == "AND":
             x = self.recursive_interpret(e.e1)
             y =  self.recursive_interpret(e.e2)
@@ -358,8 +375,14 @@ class Interpreter():
 # tree = parse.top()
 # print(Interpreter(tree).interpret())
 
+############################################################
+#hi surya these are test strings for you to try:
+#(false ∨ true) ∧ (true ∨ false)
+#(2 * 4 < 100 ∧ -1 = 0 + 1)
+#(2 * 4 < 100 ∧ -1 = -2 + 1)
+#true = true ∧ -1 < 2
 
-input = "(false ∨ true) ∧ (true ∨ false)"
+input = ""
 tokens = Tonkenizer(input)
 parse = Parser(tokens)
 tree = parse.bools()
