@@ -10,7 +10,7 @@ class Token():
         self.type = type
         self.value = value
 
-class Tonkenizer():
+class Tokenizer():
     #Takes in text and cleans it for individual tokens
     def __init__(self, text):
         # input from test string
@@ -158,7 +158,6 @@ class Tonkenizer():
             return "Unknown value"
         return Token("EOF", None)
 
-
 class Expession():
     #basic element of the tree This becomes the basis for the AST for arith
     def __init__(self, e1, type, e2):
@@ -198,22 +197,26 @@ class BOOL():
 class AndExpr(Expession):
     def __init__(self, expr1, expr2):
         super().__init__(expr1, "AND", expr2)
+
 class OrExpr(Expession):
     def __init__(self, expr1, expr2):
         super().__init__(expr1, "OR", expr2)
+
 class EqualExpr(Expession):
     def __init__(self, expr1, expr2):
         super().__init__(expr1, "EQUAL", expr2)
+
 class LessExpr(Expession):
     def __init__(self, expr1, expr2):
         super().__init__(expr1, "LESS", expr2)
+
 class MoreExpr(Expession):
     def __init__(self, expr1, expr2):
         super().__init__(expr1, "MORE", expr2)
+
 class NotExpr(Expession):
     def __init__(self, expr1):
         super().__init__(expr1, "NOT", "")
-
 
 class Var():
     #variable element of the tree
@@ -222,57 +225,70 @@ class Var():
         self.value = token.value
         self.type = "Var"
 
+class SemiExpr(Expession):
+    def __init__(self,expr1, expr2):
+        super().__init__(expr1, "SEMI", expr2)
 
+class WhileExpr(Expession):
+    def __init__(self,expr1, expr2):
+        super().__init__("WHILE", expr1, "DO", expr2)
+
+class IfExpr():
+    def __init__(self,expr1, expr2, expr3):
+        self.b = expr1
+        self.c1 = expr2
+        self.c2 = expr3
+        self.type = "IFExpr"
 
 
 class Parser(object):
     #recieves tokenized texts and parses it into a tree
-    def __init__(self, tonkenizer):
-        self.tonkenizer = tonkenizer
+    def __init__(self, tokenizer):
+        self.tokenizer = tokenizer
         # set current token to the first token taken from the input
-        self.current_token = self.tonkenizer.create_next_token()
+        self.current_token = self.tokenizer.create_next_token()
 
     def bottom(self):
         #most atomic values of the arith language (integers)
         tree = self.current_token
         if tree.value == "-":
             #handles negative numbers
-            self.current_token = self.tonkenizer.create_next_token()
+            self.current_token = self.tokenizer.create_next_token()
             tree = self.current_token
             tree.value = -tree.value
             #print(tree.value)
-            self.current_token = self.tonkenizer.create_next_token()
+            self.current_token = self.tokenizer.create_next_token()
             return Num(tree)
 
         elif type(tree.value) == int:
-            self.current_token = self.tonkenizer.create_next_token()
+            self.current_token = self.tokenizer.create_next_token()
             return Num(tree)
 
         elif (tree.type) == "BOOL":
-            self.current_token = self.tonkenizer.create_next_token()
+            self.current_token = self.tokenizer.create_next_token()
             return BOOL(tree)
 
         elif (tree.value) == "(":
             #for left/right parenthesis
-            self.current_token = self.tonkenizer.create_next_token()
-            tree = self.bools()
-            self.current_token = self.tonkenizer.create_next_token()
+            self.current_token = self.tokenizer.create_next_token()
+            tree = self.commands()
+            self.current_token = self.tokenizer.create_next_token()
             return tree
         elif (tree.value) == "{":
             #for left/right curly
-            self.current_token = self.tonkenizer.create_next_token()
-            tree = self.bools()
-            self.current_token = self.tonkenizer.create_next_token()
+            self.current_token = self.tokenizer.create_next_token()
+            tree = self.commands()
+            self.current_token = self.tokenizer.create_next_token()
             return tree
 
         elif (tree.value) == "¬":
-            self.current_token = self.tonkenizer.create_next_token()
+            self.current_token = self.tokenizer.create_next_token()
             if self.current_token.value == "(":
-                self.current_token = self.tonkenizer.create_next_token()
-                tree = self.bools()
+                self.current_token = self.tokenizer.create_next_token()
+                tree = self.commands()
             elif self.current_token.value == "{":
-                self.current_token = self.tonkenizer.create_next_token()
-                tree = self.bools()
+                self.current_token = self.tokenizer.create_next_token()
+                tree = self.commands()
             elif self.current_token.type == "BOOL":
                 tree = BOOL(tree)
             tree = NotExpr(tree)
@@ -280,12 +296,11 @@ class Parser(object):
 
         return "unknown"
 
-
     def mid(self):
         #handles multiplication of numbers, operations that are here have medium importance.
         tree = self.bottom()
         while self.current_token.value == "*":
-            self.current_token = self.tonkenizer.create_next_token()
+            self.current_token = self.tokenizer.create_next_token()
             tree = ProdExpr(tree, self.bottom())
 
         return tree
@@ -295,11 +310,11 @@ class Parser(object):
         tree  = self.mid()
         while self.current_token.value in ("+", "-"):
             if self.current_token.value == "+":
-                self.current_token = self.tonkenizer.create_next_token()
+                self.current_token = self.tokenizer.create_next_token()
                 tree = SumExpr(tree, self.mid())
                 #return tree
             if self.current_token.value == "-":
-                self.current_token = self.tonkenizer.create_next_token()
+                self.current_token = self.tokenizer.create_next_token()
                 tree = MinusExpr(tree, self.mid())
 
         return tree
@@ -309,13 +324,13 @@ class Parser(object):
         tree  = self.top()
         while self.current_token.value in ("<", ">", "="):
             if self.current_token.value == "<":
-                self.current_token = self.tonkenizer.create_next_token()
+                self.current_token = self.tokenizer.create_next_token()
                 tree = LessExpr(tree, self.top())
             if self.current_token.value == ">":
-                self.current_token = self.tonkenizer.create_next_token()
+                self.current_token = self.tokenizer.create_next_token()
                 tree = MoreExpr(tree, self.top())
             if self.current_token.value == "=":
-                self.current_token = self.tonkenizer.create_next_token()
+                self.current_token = self.tokenizer.create_next_token()
                 tree = EqualExpr(tree, self.top())
         return tree
 
@@ -324,12 +339,34 @@ class Parser(object):
         tree  = self.comparators()
         while self.current_token.value in ("∨", "∧"):
             if self.current_token.value == "∧":
-                self.current_token = self.tonkenizer.create_next_token()
+                self.current_token = self.tokenizer.create_next_token()
                 tree = AndExpr(tree, self.comparators())
             if self.current_token.value == "∨":
-                self.current_token = self.tonkenizer.create_next_token()
+                self.current_token = self.tokenizer.create_next_token()
                 tree = OrExpr(tree, self.comparators())
         return tree
+
+    def commands(self):
+        tree = self.bools()
+        while self.current_token.value in ("IF","WHILE"):
+            if self.current_token.value == "IF":
+                b = []
+                c1 = []
+                c2  = []
+                while(self.current_token.value != "THEN"):
+                    self.current_token = self.tokenizer.create_next_token()
+                    b.append(self.curret_token)
+                
+                while(self.current_token.value != "ELSE"):
+                    self.current_token = self.tokenizer.create_next_token()
+                    c1.append(self.curret_token)
+
+                print("B List {}".format(b))
+                print("C1 List {}".format(c1))
+                print("C2 List {}".format(c2))
+                tree = IfExpr(b,c1,c2)
+        return tree
+
 
 class Interpreter():
     #recieves a parsed tree and outputs the result
@@ -379,9 +416,19 @@ class Interpreter():
         elif e.type == "NOT":
             x = not(self.recursive_interpret(e.e1))
             return x
+        elif e.type == "IFExpr":
+            if(self.recursive_interpret(e.b)):
+                z = self.recursive_interpret(e.c1)
+            else: 
+                z = self.recursive_interpret(e.c2)
+            return z
+        # elif e.type == "WHILEExpr":
+        #     while(self.recursive_interpret(e.b)):
+        #         z = self.recursive_interpret(e.c)
+        #     return z
 
     def interpret(self):
-        return self.recursive_interpret( self.tree)
+        return self.recursive_interpret(self.tree)
 
 # #recieves the input from stdin
 # while True:
@@ -391,7 +438,7 @@ class Interpreter():
 #         except EOFError:
 #             break
 # #calls the necessary functions and releases an output
-# toke = Tonkenizer(text)
+# toke = Tokenizer(text)
 # parse = Parser(toke)
 # tree = parse.top()
 # print(Interpreter(tree).interpret())
@@ -405,14 +452,17 @@ class Interpreter():
 #¬(true ∨ false)
 #¬{(2 * 4 < 100 ∧ -1 = -2 + 1)}
 #¬true
+# if true then true else false
 
 
-input = ""
-tokens = Tonkenizer(input)
+input = "if true then true else false"
+tokens = Tokenizer(input)
+
+# for i in range(len(input)):
+#     current = tokens.create_next_token()
+#     if(current.type != "EOF"):
+#         print("Token( {} , '{}')".format(current.type,current.value))
+
 parse = Parser(tokens)
-tree = parse.bools()
+tree = parse.commands()
 print(Interpreter(tree).interpret())
-for i in range(len(input)):
-    current = tokens.create_next_token()
-    if(current.type != "EOF"):
-        print("Token( {} , '{}')".format(current.type,current.value))
