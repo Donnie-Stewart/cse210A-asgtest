@@ -210,6 +210,11 @@ class LessExpr(Expession):
 class MoreExpr(Expession):
     def __init__(self, expr1, expr2):
         super().__init__(expr1, "MORE", expr2)
+class NotExpr(Expession):
+    def __init__(self, expr1):
+        super().__init__(expr1, "NOT", "")
+
+
 class Var():
     #variable element of the tree
     def __init__(self, token):
@@ -258,6 +263,19 @@ class Parser(object):
             self.current_token = self.tonkenizer.create_next_token()
             tree = self.bools()
             self.current_token = self.tonkenizer.create_next_token()
+            return tree
+
+        elif (tree.value) == "¬":
+            self.current_token = self.tonkenizer.create_next_token()
+            if self.current_token.value == "(":
+                self.current_token = self.tonkenizer.create_next_token()
+                tree = self.bools()
+            elif self.current_token.value == "{":
+                self.current_token = self.tonkenizer.create_next_token()
+                tree = self.bools()
+            elif self.current_token.type == "BOOL":
+                tree = BOOL(tree)
+            tree = NotExpr(tree)
             return tree
 
         return "unknown"
@@ -320,9 +338,9 @@ class Interpreter():
 
     def recursive_interpret(self, e):
         #simple recursive function to iterate through the tree
-        # print(e.type )
+        #print(e.type )
         if e.type == "Num":
-            print(e.value)
+            #print(e.value)
             return e.value
         elif e.type == "PLUS":
             return self.recursive_interpret(e.e1) + self.recursive_interpret(e.e2)
@@ -358,6 +376,9 @@ class Interpreter():
             y =  self.recursive_interpret(e.e2)
             z = x or y
             return z
+        elif e.type == "NOT":
+            x = not(self.recursive_interpret(e.e1))
+            return x
 
     def interpret(self):
         return self.recursive_interpret( self.tree)
@@ -381,6 +402,10 @@ class Interpreter():
 #(2 * 4 < 100 ∧ -1 = 0 + 1)
 #(2 * 4 < 100 ∧ -1 = -2 + 1)
 #true = true ∧ -1 < 2
+#¬(true ∨ false)
+#¬{(2 * 4 < 100 ∧ -1 = -2 + 1)}
+#¬true
+
 
 input = ""
 tokens = Tonkenizer(input)
