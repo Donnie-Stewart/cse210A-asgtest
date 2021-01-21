@@ -134,9 +134,9 @@ class Tonkenizer():
                     self.increment()
 
                 if word == "true":
-                    return Token("TRUE", "true")
+                    return Token("BOOL", "true")
                 if word == "false":
-                    return Token("FALSE", "false")
+                    return Token("BOOL", "false")
 
                 if word == "if":
                     return Token("IF", "if")
@@ -172,21 +172,6 @@ class Num():
         self.token = token
         self.value = token.value
         self.type = "Num"
-class BOOL():
-    #true/false element of the tree
-    def __init__(self, token):
-        self.token = token
-        self.value = token.value
-        self.type = "BOOL"
-
-class Var():
-    #variable element of the tree
-    def __init__(self, token):
-        self.token = token
-        self.value = token.value
-        self.type = "Var"
-
-
 
 class SumExpr(Expession):
     #for adding two expressions
@@ -202,6 +187,38 @@ class MinusExpr(Expession):
     #for subtracting two expressions
     def __init__(self, expr1, expr2):
         super().__init__(expr1, "MINUS", expr2)
+
+class BOOL():
+    #true/false element of the tree
+    def __init__(self, token):
+        self.token = token
+        self.value = token.value
+        self.type = "BOOL"
+
+class AndExpr(Expession):
+    def __init__(self, expr1, expr2):
+        super().__init__(expr1, "AND", expr2)
+class OrExpr(Expession):
+    def __init__(self, expr1, expr2):
+        super().__init__(expr1, "OR", expr2)
+class EqualExpr(Expession):
+    def __init__(self, expr1, expr2):
+        super().__init__(expr1, "EQUAL", expr2)
+class LessExpr(Expession):
+    def __init__(self, expr1, expr2):
+        super().__init__(expr1, "LESS", expr2)
+class MoreExpr(Expession):
+    def __init__(self, expr1, expr2):
+        super().__init__(expr1, "MORE", expr2)
+class Var():
+    #variable element of the tree
+    def __init__(self, token):
+        self.token = token
+        self.value = token.value
+        self.type = "Var"
+
+
+
 
 class Parser(object):
     #recieves tokenized texts and parses it into a tree
@@ -220,26 +237,26 @@ class Parser(object):
             tree.value = -tree.value
             #print(tree.value)
             self.current_token = self.tonkenizer.create_next_token()
-            #print(self.current_token.value)
-
             return Num(tree)
 
         elif type(tree.value) == int:
-            #print(tree.value)
             self.current_token = self.tonkenizer.create_next_token()
-            #print(self.current_token.value)
             return Num(tree)
+
+        elif (tree.type) == "BOOL":
+            self.current_token = self.tonkenizer.create_next_token()
+            return BOOL(tree)
 
         elif (tree.value) == "(":
             #for left/right parenthesis
             self.current_token = self.tonkenizer.create_next_token()
-            tree = self.top()
+            tree = self.bools()
             self.current_token = self.tonkenizer.create_next_token()
             return tree
         elif (tree.value) == "{":
             #for left/right curly
             self.current_token = self.tonkenizer.create_next_token()
-            tree = self.top()
+            tree = self.bools()
             self.current_token = self.tonkenizer.create_next_token()
             return tree
 
@@ -252,6 +269,7 @@ class Parser(object):
         while self.current_token.value == "*":
             self.current_token = self.tonkenizer.create_next_token()
             tree = ProdExpr(tree, self.bottom())
+
         return tree
 
     def top(self):
@@ -268,6 +286,30 @@ class Parser(object):
 
         return tree
 
+    def comparators(self):
+        #handles plus minus, these operations are easy to separate in math and thus are least important
+        tree  = self.top()
+        # while self.current_token.value in ("+", "-"):
+        #     if self.current_token.value == "+":
+        #         self.current_token = self.tonkenizer.create_next_token()
+        #         tree = SumExpr(tree, self.mid())
+        #         #return tree
+        #     if self.current_token.value == "-":
+        #         self.current_token = self.tonkenizer.create_next_token()
+        #         tree = MinusExpr(tree, self.mid())
+        return tree
+
+    def bools(self):
+        #bools have super low priority, thus highest in recurssion
+        tree  = self.comparators()
+        while self.current_token.value in ("∨", "∧"):
+            if self.current_token.value == "∧":
+                self.current_token = self.tonkenizer.create_next_token()
+                tree = AndExpr(tree, self.comparators())
+            if self.current_token.value == "∨":
+                self.current_token = self.tonkenizer.create_next_token()
+                tree = OrExpr(tree, self.comparators())
+        return tree
 
 class Interpreter():
     #recieves a parsed tree and outputs the result
@@ -276,8 +318,9 @@ class Interpreter():
 
     def recursive_interpret(self, e):
         #simple recursive function to iterate through the tree
-        #print(e.type )
+        print(e.type )
         if e.type == "Num":
+            print(e.value)
             return e.value
         elif e.type == "PLUS":
             return self.recursive_interpret(e.e1) + self.recursive_interpret(e.e2)
@@ -285,6 +328,19 @@ class Interpreter():
             return self.recursive_interpret(e.e1) - self.recursive_interpret(e.e2)
         elif e.type == "MUL":
             return self.recursive_interpret(e.e1) * self.recursive_interpret(e.e2)
+
+        elif e.type == "BOOL":
+            return e.value
+        elif e.type == "AND":
+            x = self.recursive_interpret(e.e1)
+            y =  self.recursive_interpret(e.e2)
+            z = x and y
+            return z
+        elif e.type == "OR":
+            x = self.recursive_interpret(e.e1)
+            y =  self.recursive_interpret(e.e2)
+            z = x or y
+            return z
 
     def interpret(self):
         return self.recursive_interpret( self.tree)
@@ -303,10 +359,10 @@ class Interpreter():
 # print(Interpreter(tree).interpret())
 
 
-input = "{(-1) * 2} * 2"
+input = "(false ∨ true) ∧ (true ∨ false)"
 tokens = Tonkenizer(input)
 parse = Parser(tokens)
-tree = parse.top()
+tree = parse.bools()
 print(Interpreter(tree).interpret())
 for i in range(len(input)):
     current = tokens.create_next_token()
