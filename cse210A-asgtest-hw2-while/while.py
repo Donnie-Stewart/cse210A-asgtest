@@ -19,7 +19,6 @@ class Tonkenizer():
         self.i = 0
         self.current_char = self.text[self.i]
 
-
     def increment(self):
         #moves to the next character in the text
         self.i += 1
@@ -43,23 +42,119 @@ class Tonkenizer():
     def create_next_token(self):
         #iterates to the following item for evaluation
         while self.current_char is not None:
+
+            # spaces 
             if self.current_char.isspace():
                 self.increment()
                 continue
+
             if self.current_char == "'":
                 self.increment()
                 continue
+
+            #math 
             if self.current_char.isdigit():
                 return Token("INT", self.integer())
+
             if self.current_char == "+":
                 self.increment()
+
                 return Token("PLUS", "+")
+
             if self.current_char == "-":
                 self.increment()
                 return Token("MINUS", "-")
+
             if self.current_char == "*":
                 self.increment()
                 return Token("MUL", "*")
+
+            # brackers and parens
+            if self.current_char == "(":
+                self.increment()
+                return Token("LPAREN", "(")
+
+            if self.current_char == ")":
+                self.increment()
+                return Token("RPAREN", ")")
+
+            if self.current_char == "{":
+                self.increment()
+                return Token("LBRAC", "{")
+
+            if self.current_char == "}":
+                self.increment()
+                return Token("RBRAC", "}")
+
+            # logical operators and, or, not, less than, greater than, assign, equal
+            if self.current_char == "¬":
+                self.increment()
+                return Token("NOT", "¬")
+
+            if self.current_char == "∧":
+                self.increment()
+                return Token("AND", "∧")
+
+            if self.current_char == "∨":
+                self.increment()
+                return Token("OR", "∨")
+
+            if self.current_char == "<":
+                self.increment()
+                return Token("LESS", "<")
+
+            if self.current_char == ">":
+                self.increment()
+                return Token("MORE", ">")
+
+            if self.current_char == ":": # increment twice to skip := 
+                self.increment()
+                self.increment()
+                return Token("ASSIGN", ":=")
+
+            if self.current_char == "=": 
+                self.increment()
+                self.increment()
+                return Token("EQUAL", "=")
+
+            if self.current_char == "⊕": 
+                self.increment()
+                self.increment()
+                return Token("XOR", "⊕")
+
+            if self.current_char == ";": 
+                self.increment()
+                self.increment()
+                return Token("SEMI", ";")
+            
+            if self.current_char.isalpha():
+                word = ""
+                while((self.current_char is not None) and self.current_char.isalpha() ):
+                    word = word + self.current_char
+                    self.increment()
+                    
+                if word == "true": 
+                    return Token("TRUE", "true")
+                if word == "false": 
+                    return Token("FALSE", "false")
+
+                if word == "if": 
+                    return Token("IF", "if")
+                if word == "then": 
+                    return Token("THEN", "then")
+                if word == "else": 
+                    return Token("ELSE", "else")
+
+                if word == "while": 
+                    return Token("WHILE", "while")
+                if word == "do": 
+                    return Token("DO", "do")
+                if word == "skip": 
+                    return Token("SKIP", "skip")
+
+                else:
+                    return Token("VAR", word)
+       
             return "Unknown value"
         return Token("EOF", None)
 
@@ -120,7 +215,7 @@ class Parser(object):
             #print(self.current_token.value)
             return Num(tree)
 
-        return "unknonw"
+        return "unknown"
 
 
     def mid(self):
@@ -166,15 +261,23 @@ class Interpreter():
     def interpret(self):
         return self.recursive_interpret( self.tree)
 
-#recieves the input from stdin
-while True:
-        try:
-            text = input("")
+# #recieves the input from stdin
+# while True:
+#         try:
+#             text = input("")
 
-        except EOFError:
-            break
-#calls the necessary functions and releases an output
-toke = Tonkenizer(text)
-parse = Parser(toke)
-tree = parse.top()
-print(Interpreter(tree).interpret())
+#         except EOFError:
+#             break
+# #calls the necessary functions and releases an output
+# toke = Tonkenizer(text)
+# parse = Parser(toke)
+# tree = parse.top()
+# print(Interpreter(tree).interpret())
+
+
+input = "if ( y * 4 < -1 - x ∧ -1 = 0 + y ) then z := ( -1 - -1 ) * -4 else z := 2 * -4 ; if ( y - -3 = y * z ∨ n * y < 1 * 2 ) then skip else if ( 1 < 0 - x ∨ true ) then x := y + -4 else y := -4 * y ⊕ ¬ ;"
+tokens = Tonkenizer(input)
+for i in range(len(input)):
+    current = tokens.create_next_token()
+    if(current.type != "EOF"):
+        print("Token( {} , '{}')".format(current.type,current.value))
