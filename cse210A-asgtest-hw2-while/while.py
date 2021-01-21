@@ -172,6 +172,21 @@ class Num():
         self.token = token
         self.value = token.value
         self.type = "Num"
+class BOOL():
+    #true/false element of the tree
+    def __init__(self, token):
+        self.token = token
+        self.value = token.value
+        self.type = "BOOL"
+
+class Var():
+    #variable element of the tree
+    def __init__(self, token):
+        self.token = token
+        self.value = token.value
+        self.type = "Var"
+
+
 
 class SumExpr(Expession):
     #for adding two expressions
@@ -214,7 +229,15 @@ class Parser(object):
             self.current_token = self.tonkenizer.create_next_token()
             #print(self.current_token.value)
             return Num(tree)
+
         elif (tree.value) == "(":
+            #for left/right parenthesis
+            self.current_token = self.tonkenizer.create_next_token()
+            tree = self.top()
+            self.current_token = self.tonkenizer.create_next_token()
+            return tree
+        elif (tree.value) == "{":
+            #for left/right curly
             self.current_token = self.tonkenizer.create_next_token()
             tree = self.top()
             self.current_token = self.tonkenizer.create_next_token()
@@ -280,11 +303,11 @@ class Interpreter():
 # print(Interpreter(tree).interpret())
 
 
-input = "(-1 - -1) * 2"
+input = "{(-1) * 2} * 2"
 tokens = Tonkenizer(input)
 parse = Parser(tokens)
-# tree = parse.top()
-# print(Interpreter(tree).interpret())
+tree = parse.top()
+print(Interpreter(tree).interpret())
 for i in range(len(input)):
     current = tokens.create_next_token()
     if(current.type != "EOF"):
