@@ -43,7 +43,7 @@ class Tonkenizer():
         #iterates to the following item for evaluation
         while self.current_char is not None:
 
-            # spaces 
+            # spaces
             if self.current_char.isspace():
                 self.increment()
                 continue
@@ -52,7 +52,7 @@ class Tonkenizer():
                 self.increment()
                 continue
 
-            #math 
+            #math
             if self.current_char.isdigit():
                 return Token("INT", self.integer())
 
@@ -107,54 +107,54 @@ class Tonkenizer():
                 self.increment()
                 return Token("MORE", ">")
 
-            if self.current_char == ":": # increment twice to skip := 
+            if self.current_char == ":": # increment twice to skip :=
                 self.increment()
                 self.increment()
                 return Token("ASSIGN", ":=")
 
-            if self.current_char == "=": 
+            if self.current_char == "=":
                 self.increment()
                 self.increment()
                 return Token("EQUAL", "=")
 
-            if self.current_char == "⊕": 
+            if self.current_char == "⊕":
                 self.increment()
                 self.increment()
                 return Token("XOR", "⊕")
 
-            if self.current_char == ";": 
+            if self.current_char == ";":
                 self.increment()
                 self.increment()
                 return Token("SEMI", ";")
-            
+
             if self.current_char.isalpha():
                 word = ""
                 while((self.current_char is not None) and self.current_char.isalpha() ):
                     word = word + self.current_char
                     self.increment()
-                    
-                if word == "true": 
+
+                if word == "true":
                     return Token("TRUE", "true")
-                if word == "false": 
+                if word == "false":
                     return Token("FALSE", "false")
 
-                if word == "if": 
+                if word == "if":
                     return Token("IF", "if")
-                if word == "then": 
+                if word == "then":
                     return Token("THEN", "then")
-                if word == "else": 
+                if word == "else":
                     return Token("ELSE", "else")
 
-                if word == "while": 
+                if word == "while":
                     return Token("WHILE", "while")
-                if word == "do": 
+                if word == "do":
                     return Token("DO", "do")
-                if word == "skip": 
+                if word == "skip":
                     return Token("SKIP", "skip")
 
                 else:
                     return Token("VAR", word)
-       
+
             return "Unknown value"
         return Token("EOF", None)
 
@@ -214,6 +214,11 @@ class Parser(object):
             self.current_token = self.tonkenizer.create_next_token()
             #print(self.current_token.value)
             return Num(tree)
+        elif (tree.value) == "(":
+            self.current_token = self.tonkenizer.create_next_token()
+            tree = self.top()
+            self.current_token = self.tonkenizer.create_next_token()
+            return tree
 
         return "unknown"
 
@@ -275,8 +280,11 @@ class Interpreter():
 # print(Interpreter(tree).interpret())
 
 
-input = "if ( y * 4 < -1 - x ∧ -1 = 0 + y ) then z := ( -1 - -1 ) * -4 else z := 2 * -4 ; if ( y - -3 = y * z ∨ n * y < 1 * 2 ) then skip else if ( 1 < 0 - x ∨ true ) then x := y + -4 else y := -4 * y ⊕ ¬ ;"
+input = "(-1 - -1) * 2"
 tokens = Tonkenizer(input)
+parse = Parser(tokens)
+# tree = parse.top()
+# print(Interpreter(tree).interpret())
 for i in range(len(input)):
     current = tokens.create_next_token()
     if(current.type != "EOF"):
