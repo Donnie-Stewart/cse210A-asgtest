@@ -129,7 +129,7 @@ class Tokenizer():
 
             if self.current_char.isalpha():
                 word = ""
-                while((self.current_char is not None) and self.current_char.isalpha() ):
+                while((self.current_char is not None) and (self.current_char.isalpha() or self.current_char.isdigit())):
                     word = word + self.current_char
                     self.increment()
 
@@ -222,7 +222,8 @@ class Var():
     #variable element of the tree
     def __init__(self, token):
         self.token = token
-        self.value = token.value
+        self.name = token.value
+        self.value = 0
         self.type = "Var"
 
 class SemiExpr(Expession):
@@ -269,6 +270,9 @@ class Parser(object):
         elif (tree.type) == "BOOL":
             self.current_token = self.tokenizer.create_next_token()
             return BOOL(tree)
+        elif (tree.type) == "VAR":
+            self.current_token = self.tokenizer.create_next_token()
+            return Var(tree)
 
         elif (tree.value) == "(":
             #for left/right parenthesis
@@ -357,14 +361,14 @@ class Parser(object):
                     b = self.bools()
                     self.current_token = self.tokenizer.create_next_token()
                     #print("curr token", self.current_token.value)
-                
+
                 if(self.current_token.value != "else"):
                     #self.current_token = self.tokenizer.create_next_token()
                     #print("Before c1", self.current_token.value)
                     c1 = self.bools()
                     #print("c1 is ", c1)
                     self.current_token = self.tokenizer.create_next_token()
-                
+
                 c2 = self.bools()
                 #print("c2 is", c2.value)
                 # print("B List {}".format(b))
@@ -443,7 +447,7 @@ class Interpreter():
                 z = self.recursive_interpret(e.c1)
             elif(a == True):
                 z = self.recursive_interpret(e.c1)
-            else: 
+            else:
                 print("else")
                 z = self.recursive_interpret(e.c2)
             return z
@@ -457,6 +461,9 @@ class Interpreter():
             left = self.recursive_interpret(e.e1)
             right= self.recursive_interpret(e.e2)
             return left,right
+        elif e.type == "Var":
+
+            return e.name, e.value
 
 
     def interpret(self):
@@ -488,7 +495,7 @@ class Interpreter():
 # if 5 > 10 ∧ 3 < 6 then 1 else 0
 # while true do 69
 
-input = "6 > 3 ∨ 5 < 6"
+input = "z8"
 tokens = Tokenizer(input)
 
 # for i in range(len(input)):
