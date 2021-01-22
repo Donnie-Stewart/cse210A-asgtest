@@ -226,6 +226,10 @@ class Var():
         self.value = 0
         self.type = "Var"
 
+class AssignExpr(Expession):
+    def __init__(self,expr1, expr2):
+        super().__init__(expr1, "ASSIGN", expr2)
+
 class SemiExpr(Expession):
     def __init__(self,expr1, expr2):
         super().__init__(expr1, "SEMI", expr2)
@@ -354,7 +358,7 @@ class Parser(object):
 
     def commands(self):
         tree = self.bools()
-        while self.current_token.type in ("IF","WHILE","SEMI"):
+        while self.current_token.type in ("IF","WHILE","SEMI", "ASSIGN"):
             if self.current_token.value == "if":
                 if(self.current_token.value != "then"):
                     self.current_token = self.tokenizer.create_next_token()
@@ -387,6 +391,10 @@ class Parser(object):
                 self.current_token = self.tokenizer.create_next_token()
                 tree = SemiExpr(tree, self.bools())
 
+            if self.current_token.type == "ASSIGN":
+                self.current_token = self.tokenizer.create_next_token()
+                tree = AssignExpr(tree, self.bools())
+
         return tree
 
 
@@ -394,15 +402,17 @@ class Interpreter():
     #recieves a parsed tree and outputs the result
     def __init__(self, tree):
         self.tree = tree
+        # self.var_dict = {}
 
     def recursive_interpret(self, e):
         #simple recursive function to iterate through the tree
         # print("E is ", e)
-        # print(e.type)
+        print(e.type)
         if e.type == "Num":
             #print(e.value)
             return e.value
         elif e.type == "PLUS":
+            
             return self.recursive_interpret(e.e1) + self.recursive_interpret(e.e2)
         elif e.type == "MINUS":
             return self.recursive_interpret(e.e1) - self.recursive_interpret(e.e2)
@@ -462,8 +472,11 @@ class Interpreter():
             right= self.recursive_interpret(e.e2)
             return left,right
         elif e.type == "Var":
-
-            return e.name, e.value
+            return e
+        elif e.type == "ASSIGN":
+            x = self.recursive_interpret(e.e1)
+            x.value = self.recursive_interpret(e.e2)
+            return
 
 
     def interpret(self):
@@ -495,7 +508,7 @@ class Interpreter():
 # if 5 > 10 ∧ 3 < 6 then 1 else 0
 # while true do 69
 
-input = "z8"
+input = "z8 := 5; z8 := z8 + 1"
 tokens = Tokenizer(input)
 
 # for i in range(len(input)):
