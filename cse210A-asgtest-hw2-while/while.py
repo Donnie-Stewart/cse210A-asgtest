@@ -231,7 +231,9 @@ class SemiExpr(Expession):
 
 class WhileExpr(Expession):
     def __init__(self,expr1, expr2):
-        super().__init__("WHILE", expr1, "DO", expr2)
+        self.b = expr1
+        self.c = expr2
+        self.type = "WHILEExpr"
 
 class IfExpr():
     def __init__(self,expr1, expr2, expr3):
@@ -348,23 +350,39 @@ class Parser(object):
 
     def commands(self):
         tree = self.bools()
-        while self.current_token.value in ("IF","WHILE"):
-            if self.current_token.value == "IF":
-                b = []
-                c1 = []
-                c2  = []
-                while(self.current_token.value != "THEN"):
+        while self.current_token.type in ("IF","WHILE","SEMI"):
+            if self.current_token.value == "if":
+                if(self.current_token.value != "then"):
                     self.current_token = self.tokenizer.create_next_token()
-                    b.append(self.curret_token)
+                    b = self.bools()
+                    self.current_token = self.tokenizer.create_next_token()
+                    #print("curr token", self.current_token.value)
                 
-                while(self.current_token.value != "ELSE"):
+                if(self.current_token.value != "else"):
+                    #self.current_token = self.tokenizer.create_next_token()
+                    #print("Before c1", self.current_token.value)
+                    c1 = self.bools()
+                    #print("c1 is ", c1)
                     self.current_token = self.tokenizer.create_next_token()
-                    c1.append(self.curret_token)
-
-                print("B List {}".format(b))
-                print("C1 List {}".format(c1))
-                print("C2 List {}".format(c2))
+                
+                c2 = self.bools()
+                #print("c2 is", c2.value)
+                # print("B List {}".format(b))
+                # print("C1 List {}".format(c1))
+                # print("C2 List {}".format(c2))
                 tree = IfExpr(b,c1,c2)
+
+            if self.current_token.value == "while":
+                self.current_token = self.tokenizer.create_next_token()
+                b = self.bools()
+                self.current_token = self.tokenizer.create_next_token()
+                c = self.bools()
+                tree = WhileExpr(b,c)
+
+            if self.current_token.value == ";":
+                self.current_token = self.tokenizer.create_next_token()
+                tree = SemiExpr(tree, self.bools())
+
         return tree
 
 
@@ -375,7 +393,8 @@ class Interpreter():
 
     def recursive_interpret(self, e):
         #simple recursive function to iterate through the tree
-        #print(e.type )
+        # print("E is ", e)
+        # print(e.type)
         if e.type == "Num":
             #print(e.value)
             return e.value
@@ -387,6 +406,7 @@ class Interpreter():
             return self.recursive_interpret(e.e1) * self.recursive_interpret(e.e2)
 
         elif e.type == "BOOL":
+            print("E value", e.value)
             return e.value
         elif e.type == "EQUAL":
             x = self.recursive_interpret(e.e1)
@@ -417,15 +437,27 @@ class Interpreter():
             x = not(self.recursive_interpret(e.e1))
             return x
         elif e.type == "IFExpr":
-            if(self.recursive_interpret(e.b)):
+            a = self.recursive_interpret(e.b)
+            print("a is", a)
+            if(a == "true"):
+                z = self.recursive_interpret(e.c1)
+            elif(a == True):
                 z = self.recursive_interpret(e.c1)
             else: 
+                print("else")
                 z = self.recursive_interpret(e.c2)
             return z
-        # elif e.type == "WHILEExpr":
-        #     while(self.recursive_interpret(e.b)):
-        #         z = self.recursive_interpret(e.c)
-        #     return z
+        elif e.type == "WHILEExpr":
+            a = self.recursive_interpret(e.b)
+            print("a is", a)
+            while(a == "true" or a == True):
+                 return  self.recursive_interpret(e.c)
+            return
+        elif e.type == "SEMI":
+            left = self.recursive_interpret(e.e1)
+            right= self.recursive_interpret(e.e2)
+            return left,right
+
 
     def interpret(self):
         return self.recursive_interpret(self.tree)
@@ -453,9 +485,10 @@ class Interpreter():
 #¬{(2 * 4 < 100 ∧ -1 = -2 + 1)}
 #¬true
 # if true then true else false
+# if 5 > 10 ∧ 3 < 6 then 1 else 0
+# while true do 69
 
-
-input = "if true then true else false"
+input = "6 > 3 ∨ 5 < 6"
 tokens = Tokenizer(input)
 
 # for i in range(len(input)):
