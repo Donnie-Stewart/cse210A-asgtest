@@ -422,7 +422,7 @@ class Interpreter():
 
     def recursive_interpret(self, e):
         #simple recursive function to iterate through the tree
-        # print("E is ", e)
+        #print("E is ", e)
         #print(e.type)
         if e.type == "Num":
             #print(e.value)
@@ -537,7 +537,7 @@ class Interpreter():
             # a = self.recursive_interpret(e.b)
             # print("a is", a)
             # while(a == "true" or a == True):
-            while (self.recursive_interpret(e.b)):
+            while (self.recursive_interpret(e.b)  == "true") or (self.recursive_interpret(e.b) == True):
                 self.recursive_interpret(e.c)
             return
         elif e.type == "SEMI":
@@ -628,7 +628,7 @@ else:
 #z8 := 5; z8 := z8 + 1
 #while x < 5 do x := x + 1; if x > 7 then x := x + 5 else x := x - 1
 
-# input = "while false do x := 3"
+# input = "while x < 5 do x := x + 1"
 # tokens = Tokenizer(input)
 
 # for i in range(len(input)):
