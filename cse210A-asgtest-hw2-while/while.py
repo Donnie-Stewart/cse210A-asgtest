@@ -553,11 +553,12 @@ class Interpreter():
             x.value = self.recursive_interpret(e.e2)
             self.var_dict[x.name] = x.value
             # print(self.var_dict)
+            return
+
         elif e.type == "SKIP":
             return
 
 
-            return
 
     def check_var(self, e):
         # print("in check var",e.type)
@@ -628,9 +629,7 @@ else:
     final = "{"
     for key,value in variables.items():
         final = final + str(key) + " → " + str(value) + ", "
-    
+
     final = final[:-2]
     final = final + "}"
     print(final)
-
-
