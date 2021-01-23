@@ -281,13 +281,13 @@ class Parser(object):
         elif (tree.value) == "(":
             #for left/right parenthesis
             self.current_token = self.tokenizer.create_next_token()
-            tree = self.commands()
+            tree = self.semi()
             self.current_token = self.tokenizer.create_next_token()
             return tree
         elif (tree.value) == "{":
             #for left/right curly
             self.current_token = self.tokenizer.create_next_token()
-            tree = self.commands()
+            tree = self.semi()
             self.current_token = self.tokenizer.create_next_token()
             return tree
 
@@ -295,10 +295,10 @@ class Parser(object):
             self.current_token = self.tokenizer.create_next_token()
             if self.current_token.value == "(":
                 self.current_token = self.tokenizer.create_next_token()
-                tree = self.commands()
+                tree = self.semi()
             elif self.current_token.value == "{":
                 self.current_token = self.tokenizer.create_next_token()
-                tree = self.commands()
+                tree = self.semi()
             elif self.current_token.type == "BOOL":
                 tree = BOOL(tree)
             tree = NotExpr(tree)
@@ -358,7 +358,7 @@ class Parser(object):
 
     def commands(self):
         tree = self.bools()
-        while self.current_token.type in ("IF","WHILE","SEMI", "ASSIGN"):
+        while self.current_token.type in ("IF","WHILE", "ASSIGN"):
             if self.current_token.value == "if":
                 if(self.current_token.value != "then"):
                     self.current_token = self.tokenizer.create_next_token()
@@ -387,9 +387,9 @@ class Parser(object):
                 c = self.bools()
                 tree = WhileExpr(b,c)
 
-            if self.current_token.value == ";":
-                self.current_token = self.tokenizer.create_next_token()
-                tree = SemiExpr(tree, self.bools())
+            # if self.current_token.value == ";":
+            #     self.current_token = self.tokenizer.create_next_token()
+            #     tree = SemiExpr(tree, self.bools())
 
             if self.current_token.type == "ASSIGN":
                 self.current_token = self.tokenizer.create_next_token()
@@ -397,12 +397,21 @@ class Parser(object):
 
         return tree
 
+    def semi(self):
+        tree = self.commands()
+        while self.current_token.type in ("SEMI"):
+            if self.current_token.value == ";":
+                self.current_token = self.tokenizer.create_next_token()
+                tree = SemiExpr(tree, self.commands())
+        return tree
+
+
 
 class Interpreter():
     #recieves a parsed tree and outputs the result
     def __init__(self, tree):
         self.tree = tree
-        # self.var_dict = {}
+        self.var_dict = {}
 
     def recursive_interpret(self, e):
         #simple recursive function to iterate through the tree
@@ -412,8 +421,17 @@ class Interpreter():
             #print(e.value)
             return e.value
         elif e.type == "PLUS":
-            
-            return self.recursive_interpret(e.e1) + self.recursive_interpret(e.e2)
+            x = (e.e1)
+            y = (e.e2)
+            if self.check_var(x) and self.check_var(y):
+                return self.var_dict[x.name] + self.var_dict[y.name]
+            elif self.check_var(x) and  not self.check_var(y):
+                print("x:" , self.var_dict[x.name])
+                return self.var_dict[x.name] + self.recursive_interpret(y)
+            elif not self.check_var(x) and self.check_var(y):
+                return self.recursive_interpret(x) + self.var_dict[y.name]
+            return self.recursive_interpret(x) + self.recursive_interpret(y)
+
         elif e.type == "MINUS":
             return self.recursive_interpret(e.e1) - self.recursive_interpret(e.e2)
         elif e.type == "MUL":
@@ -470,13 +488,32 @@ class Interpreter():
         elif e.type == "SEMI":
             left = self.recursive_interpret(e.e1)
             right= self.recursive_interpret(e.e2)
-            return left,right
+            return self.var_dict
+
         elif e.type == "Var":
             return e
         elif e.type == "ASSIGN":
             x = self.recursive_interpret(e.e1)
+            print(x)
             x.value = self.recursive_interpret(e.e2)
+            self.var_dict[x.name] = x.value
+            # print(self.var_dict)
+
+
             return
+
+    def check_var(self, e):
+        #check if the current expression is a variable
+        if e.type ==  "Var" and e.name in self.var_dict:
+            #do nothing if already in dict
+            return True
+        elif e.type ==  "Var" and e.name in self.var_dict:
+            # if not in dict add new var and assign 0
+            self.var_dict[e.name] = 0
+            return True
+        else:
+            #other wise not a variable
+            return False
 
 
     def interpret(self):
@@ -517,5 +554,5 @@ tokens = Tokenizer(input)
 #         print("Token( {} , '{}')".format(current.type,current.value))
 
 parse = Parser(tokens)
-tree = parse.commands()
+tree = parse.semi()
 print(Interpreter(tree).interpret())
