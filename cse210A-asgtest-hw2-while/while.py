@@ -356,24 +356,32 @@ class Parser(object):
                 tree = OrExpr(tree, self.comparators())
         return tree
 
-    def commands(self):
+    def assign(self):
         tree = self.bools()
-        while self.current_token.type in ("IF","WHILE", "ASSIGN"):
+        while self.current_token.type in ("ASSIGN"):
+            if self.current_token.type == "ASSIGN":
+                self.current_token = self.tokenizer.create_next_token()
+                tree = AssignExpr(tree, self.bools())
+
+        return tree
+    def commands(self):
+        tree = self.assign()
+        while self.current_token.type in ("IF","WHILE"):
             if self.current_token.value == "if":
                 if(self.current_token.value != "then"):
                     self.current_token = self.tokenizer.create_next_token()
-                    b = self.bools()
+                    b = self.assign()
                     self.current_token = self.tokenizer.create_next_token()
                     #print("curr token", self.current_token.value)
 
                 if(self.current_token.value != "else"):
                     #self.current_token = self.tokenizer.create_next_token()
                     #print("Before c1", self.current_token.value)
-                    c1 = self.bools()
+                    c1 = self.assign()
                     #print("c1 is ", c1)
                     self.current_token = self.tokenizer.create_next_token()
 
-                c2 = self.bools()
+                c2 = self.assign()
                 #print("c2 is", c2.value)
                 # print("B List {}".format(b))
                 # print("C1 List {}".format(c1))
@@ -382,18 +390,11 @@ class Parser(object):
 
             if self.current_token.value == "while":
                 self.current_token = self.tokenizer.create_next_token()
-                b = self.bools()
+                b = self.assign()
                 self.current_token = self.tokenizer.create_next_token()
-                c = self.bools()
+                c = self.assign()
                 tree = WhileExpr(b,c)
 
-            # if self.current_token.value == ";":
-            #     self.current_token = self.tokenizer.create_next_token()
-            #     tree = SemiExpr(tree, self.bools())
-
-            if self.current_token.type == "ASSIGN":
-                self.current_token = self.tokenizer.create_next_token()
-                tree = AssignExpr(tree, self.bools())
 
         return tree
 
@@ -446,6 +447,18 @@ class Interpreter():
             z = (x == y)
             return z
         elif e.type == "LESS":
+            x = (e.e1)
+            y = (e.e2)
+            print(self.check_var(x))
+            if self.check_var(x) and self.check_var(y):
+                z = self.var_dict[x.name] < self.var_dict[y.name]
+                return z
+            elif self.check_var(x) and  not self.check_var(y):
+                z = self.var_dict[x.name] < self.recursive_interpret(y)
+                return z
+            elif not self.check_var(x) and self.check_var(y):
+                z = self.recursive_interpret(x) < self.var_dict[y.name]
+                return z
             x = self.recursive_interpret(e.e1)
             y =  self.recursive_interpret(e.e2)
             z = (x < y)
@@ -480,15 +493,16 @@ class Interpreter():
                 z = self.recursive_interpret(e.c2)
             return z
         elif e.type == "WHILEExpr":
-            a = self.recursive_interpret(e.b)
-            print("a is", a)
-            while(a == "true" or a == True):
-                 return  self.recursive_interpret(e.c)
+            # a = self.recursive_interpret(e.b)
+            # print("a is", a)
+            # while(a == "true" or a == True):
+            while (self.recursive_interpret(e.b)):
+                self.recursive_interpret(e.c)
             return
         elif e.type == "SEMI":
             left = self.recursive_interpret(e.e1)
             right= self.recursive_interpret(e.e2)
-            return self.var_dict
+            return
 
         elif e.type == "Var":
             return e
@@ -503,11 +517,12 @@ class Interpreter():
             return
 
     def check_var(self, e):
+        # print("in check var",e.type)
         #check if the current expression is a variable
         if e.type ==  "Var" and e.name in self.var_dict:
             #do nothing if already in dict
             return True
-        elif e.type ==  "Var" and e.name in self.var_dict:
+        elif e.type ==  "Var" and e.name not in self.var_dict:
             # if not in dict add new var and assign 0
             self.var_dict[e.name] = 0
             return True
@@ -544,8 +559,9 @@ class Interpreter():
 # if true then true else false
 # if 5 > 10 ∧ 3 < 6 then 1 else 0
 # while true do 69
+#z8 := 5; z8 := z8 + 1
 
-input = "z8 := 5; z8 := z8 + 1"
+input = "while x < 5 do x := x + 1; if x < 4 then x := x + 5 else x := x + 1"
 tokens = Tokenizer(input)
 
 # for i in range(len(input)):
@@ -555,4 +571,6 @@ tokens = Tokenizer(input)
 
 parse = Parser(tokens)
 tree = parse.semi()
-print(Interpreter(tree).interpret())
+y = Interpreter(tree)
+y.interpret()
+print(y.var_dict )
