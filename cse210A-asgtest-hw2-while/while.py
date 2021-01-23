@@ -617,4 +617,20 @@ parse = Parser(tokens)
 tree = parse.semi()
 y = Interpreter(tree)
 y.interpret()
-print(y.var_dict )
+
+# print the variable dictionary in the proper format
+variables = y.var_dict
+
+if(len(variables) == 0):
+    final = "{" + "}"
+    print(final)
+else:
+    final = "{"
+    for key,value in variables.items():
+        final = final + str(key) + " → " + str(value) + ", "
+    
+    final = final[:-2]
+    final = final + "}"
+    print(final)
+
+
