@@ -579,43 +579,16 @@ class Interpreter():
         return self.recursive_interpret(self.tree)
 
 # #recieves the input from stdin
-# while True:
-#         try:
-#             text = input("")
+while True:
+        try:
+            text = input("")
 
-#         except EOFError:
-#             break
-# #calls the necessary functions and releases an output
-# toke = Tokenizer(text)
-# parse = Parser(toke)
-# tree = parse.top()
-# print(Interpreter(tree).interpret())
-
-############################################################
-#hi surya these are test strings for you to try:
-#(false ∨ true) ∧ (true ∨ false)
-#(2 * 4 < 100 ∧ -1 = 0 + 1)
-#(2 * 4 < 100 ∧ -1 = -2 + 1)
-#true = true ∧ -1 < 2
-#¬(true ∨ false)
-#¬{(2 * 4 < 100 ∧ -1 = -2 + 1)}
-#¬true
-# if true then true else false
-# if 5 > 10 ∧ 3 < 6 then 1 else 0
-# while true do 69
-#z8 := 5; z8 := z8 + 1
-#while x < 5 do x := x + 1; if x > 7 then x := x + 5 else x := x - 1
-
-input = "if ( false ∨ 3 < y + X ) then l := lv + -1 else x := -4 - z ; while -1 - p = 2 - -3 ∧ false do while ( ¬ ( 2 * -2 < y * y ) ) do skip"
-tokens = Tokenizer(input)
-
-# for i in range(len(input)):
-#     current = tokens.create_next_token()
-#     if(current.type != "EOF"):
-#         print("Token( {} , '{}')".format(current.type,current.value))
-
-parse = Parser(tokens)
-tree = parse.semi()
+        except EOFError:
+            break
+#calls the necessary functions and releases an output
+toke = Tokenizer(text)
+parse = Parser(toke)
+tree = parse.top()
 y = Interpreter(tree)
 y.interpret()
 
@@ -633,3 +606,46 @@ else:
     final = final[:-2]
     final = final + "}"
     print(final)
+
+############################################################
+#hi surya these are test strings for you to try:
+#(false ∨ true) ∧ (true ∨ false)
+#(2 * 4 < 100 ∧ -1 = 0 + 1)
+#(2 * 4 < 100 ∧ -1 = -2 + 1)
+#true = true ∧ -1 < 2
+#¬(true ∨ false)
+#¬{(2 * 4 < 100 ∧ -1 = -2 + 1)}
+#¬true
+# if true then true else false
+# if 5 > 10 ∧ 3 < 6 then 1 else 0
+# while true do 69
+#z8 := 5; z8 := z8 + 1
+#while x < 5 do x := x + 1; if x > 7 then x := x + 5 else x := x - 1
+
+# input = "if ( false ∨ 3 < y + X ) then l := lv + -1 else x := -4 - z ; while -1 - p = 2 - -3 ∧ false do while ( ¬ ( 2 * -2 < y * y ) ) do skip"
+# tokens = Tokenizer(input)
+
+# # for i in range(len(input)):
+# #     current = tokens.create_next_token()
+# #     if(current.type != "EOF"):
+# #         print("Token( {} , '{}')".format(current.type,current.value))
+
+# parse = Parser(tokens)
+# tree = parse.semi()
+# y = Interpreter(tree)
+# y.interpret()
+
+# # print the variable dictionary in the proper format
+# variables = y.var_dict
+
+# if(len(variables) == 0):
+#     final = "{" + "}"
+#     print(final)
+# else:
+#     final = "{"
+#     for key,value in variables.items():
+#         final = final + str(key) + " → " + str(value) + ", "
+
+#     final = final[:-2]
+#     final = final + "}"
+#     print(final)
