@@ -592,8 +592,14 @@ tree = parse.semi()
 y = Interpreter(tree)
 y.interpret()
 
+# remove zero values
+for key,value in dict(y.var_dict).items():
+    if value == 0:
+        del y.var_dict[key]
+
 # print the variable dictionary in the proper format
 variables = OrderedDict(sorted(y.var_dict.items())) 
+
 
 if(len(variables) == 0):
     final = "{" + "}"
@@ -622,8 +628,8 @@ else:
 #z8 := 5; z8 := z8 + 1
 #while x < 5 do x := x + 1; if x > 7 then x := x + 5 else x := x - 1
 
-input = "while false do x := 3"
-tokens = Tokenizer(input)
+# input = "while false do x := 3"
+# tokens = Tokenizer(input)
 
 # for i in range(len(input)):
 #     current = tokens.create_next_token()
