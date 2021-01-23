@@ -606,7 +606,7 @@ class Interpreter():
 #z8 := 5; z8 := z8 + 1
 #while x < 5 do x := x + 1; if x > 7 then x := x + 5 else x := x - 1
 
-input = "if ( false ∨ 3 < y + X ) then l := lv + -1 else x := -4 - z ; while -1 - p = 2 - -3 ∧ false do while ( ¬ ( 2 * -2 < y * y ) ) do skip"
+input = "if ( true ∨ -1 < 0 ) then k := ( 49 ) * 3 + k else k := 2 * 2 * 2 + 3"
 tokens = Tokenizer(input)
 
 # for i in range(len(input)):
