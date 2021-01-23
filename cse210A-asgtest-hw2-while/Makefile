@@ -1,9 +1,10 @@
+
 all:
-	python3 while.py
+	# pip install pyinstaller
+	pyinstaller --onefile while.py
+	mv dist/while .
+	rm while.spec
+	rm -r __pycache__ build dist
 
 test:
-	pip install pyinstaller
-	pyinstaller --onefile arith.py
-	mv dist/arith .
-	rm arith.spec
-	rm -r __pycache__ build dist
+	python3 while.py

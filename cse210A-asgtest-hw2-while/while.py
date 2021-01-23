@@ -3,7 +3,7 @@
 #All the code below draws from insipration in the tutorial
 
 #tokens become elements derived form raw text
-
+from collections import OrderedDict
 
 class Token():
     def __init__(self, type, value):
@@ -422,7 +422,7 @@ class Interpreter():
 
     def recursive_interpret(self, e):
         #simple recursive function to iterate through the tree
-        # print("E is ", e)
+        #print("E is ", e)
         #print(e.type)
         if e.type == "Num":
             #print(e.value)
@@ -431,33 +431,33 @@ class Interpreter():
             x = (e.e1)
             y = (e.e2)
             if self.check_var(x) and self.check_var(y):
-                return self.var_dict[x.name] + self.var_dict[y.name]
+                return self.var_dict[x.name][0] + self.var_dict[y.name][0]
             elif self.check_var(x) and  not self.check_var(y):
-                return self.var_dict[x.name] + self.recursive_interpret(y)
+                return self.var_dict[x.name][0] + self.recursive_interpret(y)
             elif not self.check_var(x) and self.check_var(y):
-                return self.recursive_interpret(x) + self.var_dict[y.name]
+                return self.recursive_interpret(x) + self.var_dict[y.name][0]
             return self.recursive_interpret(x) + self.recursive_interpret(y)
 
         elif e.type == "MINUS":
             x = (e.e1)
             y = (e.e2)
             if self.check_var(x) and self.check_var(y):
-                return self.var_dict[x.name] - self.var_dict[y.name]
+                return self.var_dict[x.name][0] - self.var_dict[y.name][0]
             elif self.check_var(x) and  not self.check_var(y):
-                return self.var_dict[x.name] - self.recursive_interpret(y)
+                return self.var_dict[x.name][0] - self.recursive_interpret(y)
             elif not self.check_var(x) and self.check_var(y):
-                return self.recursive_interpret(x) - self.var_dict[y.name]
+                return self.recursive_interpret(x) - self.var_dict[y.name][0]
             return self.recursive_interpret(x) - self.recursive_interpret(y)
 
         elif e.type == "MUL":
             x = (e.e1)
             y = (e.e2)
             if self.check_var(x) and self.check_var(y):
-                return self.var_dict[x.name] * self.var_dict[y.name]
+                return self.var_dict[x.name][0] * self.var_dict[y.name][0]
             elif self.check_var(x) and  not self.check_var(y):
-                return self.var_dict[x.name] * self.recursive_interpret(y)
+                return self.var_dict[x.name][0] * self.recursive_interpret(y)
             elif not self.check_var(x) and self.check_var(y):
-                return self.recursive_interpret(x) * self.var_dict[y.name]
+                return self.recursive_interpret(x) * self.var_dict[y.name][0]
             return self.recursive_interpret(x) * self.recursive_interpret(y)
 
         elif e.type == "BOOL":
@@ -466,13 +466,13 @@ class Interpreter():
             x = (e.e1)
             y = (e.e2)
             if self.check_var(x) and self.check_var(y):
-                z = self.var_dict[x.name] == self.var_dict[y.name]
+                z = self.var_dict[x.name][0] == self.var_dict[y.name][0]
                 return z
             elif self.check_var(x) and  not self.check_var(y):
-                z = self.var_dict[x.name] == self.recursive_interpret(y)
+                z = self.var_dict[x.name][0] == self.recursive_interpret(y)
                 return z
             elif not self.check_var(x) and self.check_var(y):
-                z = self.recursive_interpret(x) == self.var_dict[y.name]
+                z = self.recursive_interpret(x) == self.var_dict[y.name][0]
                 return z
             x = self.recursive_interpret(e.e1)
             y =  self.recursive_interpret(e.e2)
@@ -482,13 +482,13 @@ class Interpreter():
             x = (e.e1)
             y = (e.e2)
             if self.check_var(x) and self.check_var(y):
-                z = self.var_dict[x.name] < self.var_dict[y.name]
+                z = self.var_dict[x.name][0] < self.var_dict[y.name][0]
                 return z
             elif self.check_var(x) and  not self.check_var(y):
-                z = self.var_dict[x.name] < self.recursive_interpret(y)
+                z = self.var_dict[x.name][0] < self.recursive_interpret(y)
                 return z
             elif not self.check_var(x) and self.check_var(y):
-                z = self.recursive_interpret(x) < self.var_dict[y.name]
+                z = self.recursive_interpret(x) < self.var_dict[y.name][0]
                 return z
             x = self.recursive_interpret(e.e1)
             y =  self.recursive_interpret(e.e2)
@@ -498,13 +498,13 @@ class Interpreter():
             x = (e.e1)
             y = (e.e2)
             if self.check_var(x) and self.check_var(y):
-                z = self.var_dict[x.name] > self.var_dict[y.name]
+                z = self.var_dict[x.name][0] > self.var_dict[y.name][0]
                 return z
             elif self.check_var(x) and  not self.check_var(y):
-                z = self.var_dict[x.name] > self.recursive_interpret(y)
+                z = self.var_dict[x.name][0] > self.recursive_interpret(y)
                 return z
             elif not self.check_var(x) and self.check_var(y):
-                z = self.recursive_interpret(x) > self.var_dict[y.name]
+                z = self.recursive_interpret(x) > self.var_dict[y.name][0]
                 return z
             x = self.recursive_interpret(e.e1)
             y =  self.recursive_interpret(e.e2)
@@ -537,7 +537,7 @@ class Interpreter():
             # a = self.recursive_interpret(e.b)
             # print("a is", a)
             # while(a == "true" or a == True):
-            while (self.recursive_interpret(e.b)):
+            while (self.recursive_interpret(e.b)  == "true") or (self.recursive_interpret(e.b) == True):
                 self.recursive_interpret(e.c)
             return
         elif e.type == "SEMI":
@@ -551,7 +551,7 @@ class Interpreter():
             x = self.recursive_interpret(e.e1)
             # print(x)
             x.value = self.recursive_interpret(e.e2)
-            self.var_dict[x.name] = x.value
+            self.var_dict[x.name] = (x.value,"keep")
             # print(self.var_dict)
             return
 
@@ -568,7 +568,7 @@ class Interpreter():
             return True
         elif e.type ==  "Var" and e.name not in self.var_dict:
             # if not in dict add new var and assign 0
-            self.var_dict[e.name] = 0
+            self.var_dict[e.name] = (0,"del")
             return True
         else:
             #other wise not a variable
@@ -578,18 +578,40 @@ class Interpreter():
     def interpret(self):
         return self.recursive_interpret(self.tree)
 
-# #recieves the input from stdin
-# while True:
-#         try:
-#             text = input("")
+#recieves the input from stdin
+while True:
+        try:
+            text = input("")
 
-#         except EOFError:
-#             break
-# #calls the necessary functions and releases an output
-# toke = Tokenizer(text)
-# parse = Parser(toke)
-# tree = parse.top()
-# print(Interpreter(tree).interpret())
+        except EOFError:
+            break
+#calls the necessary functions and releases an output
+toke = Tokenizer(text)
+parse = Parser(toke)
+tree = parse.semi()
+y = Interpreter(tree)
+y.interpret()
+
+# remove zero values
+for key,value in dict(y.var_dict).items():
+    if value[1] == "del":
+        del y.var_dict[key]
+
+# print the variable dictionary in the proper format
+variables = OrderedDict(sorted(y.var_dict.items()))
+
+
+if(len(variables) == 0):
+    final = "{" + "}"
+    print(final)
+else:
+    final = "{"
+    for key,value in variables.items():
+        final = final + str(key) + " → " + str(value[0]) + ", "
+
+    final = final[:-2]
+    final = final + "}"
+    print(final)
 
 ############################################################
 #hi surya these are test strings for you to try:
@@ -606,30 +628,30 @@ class Interpreter():
 #z8 := 5; z8 := z8 + 1
 #while x < 5 do x := x + 1; if x > 7 then x := x + 5 else x := x - 1
 
-input = "if ( true ∨ -1 < 0 ) then k := ( 49 ) * 3 + k else k := 2 * 2 * 2 + 3"
-tokens = Tokenizer(input)
+# input = "while x < 5 do x := x + 1"
+# tokens = Tokenizer(input)
 
 # for i in range(len(input)):
 #     current = tokens.create_next_token()
 #     if(current.type != "EOF"):
 #         print("Token( {} , '{}')".format(current.type,current.value))
 
-parse = Parser(tokens)
-tree = parse.semi()
-y = Interpreter(tree)
-y.interpret()
+# parse = Parser(tokens)
+# tree = parse.semi()
+# y = Interpreter(tree)
+# y.interpret()
 
-# print the variable dictionary in the proper format
-variables = y.var_dict
+# # print the variable dictionary in the proper format
+# variables = y.var_dict
 
-if(len(variables) == 0):
-    final = "{" + "}"
-    print(final)
-else:
-    final = "{"
-    for key,value in variables.items():
-        final = final + str(key) + " → " + str(value) + ", "
+# if(len(variables) == 0):
+#     final = "{" + "}"
+#     print(final)
+# else:
+#     final = "{"
+#     for key,value in variables.items():
+#         final = final + str(key) + " → " + str(value) + ", "
 
-    final = final[:-2]
-    final = final + "}"
-    print(final)
+#     final = final[:-2]
+#     final = final + "}"
+#     print(final)
