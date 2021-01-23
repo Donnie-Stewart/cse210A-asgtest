@@ -299,11 +299,15 @@ class Parser(object):
             if self.current_token.value == "(":
                 self.current_token = self.tokenizer.create_next_token()
                 tree = self.semi()
+                self.current_token = self.tokenizer.create_next_token()
+
             elif self.current_token.value == "{":
                 self.current_token = self.tokenizer.create_next_token()
                 tree = self.semi()
             elif self.current_token.type == "BOOL":
-                tree = BOOL(tree)
+                tree = BOOL(self.current_token)
+                self.current_token = self.tokenizer.create_next_token()
+
             tree = NotExpr(tree)
             return tree
 
@@ -423,7 +427,7 @@ class Interpreter():
     def recursive_interpret(self, e):
         #simple recursive function to iterate through the tree
         #print("E is ", e)
-        #print(e.type)
+        # print(e.type)
         if e.type == "Num":
             #print(e.value)
             return e.value
@@ -461,6 +465,7 @@ class Interpreter():
             return self.recursive_interpret(x) * self.recursive_interpret(y)
 
         elif e.type == "BOOL":
+            # print("asdf",e.value)
             return e.value
         elif e.type == "EQUAL":
             x = (e.e1)
@@ -521,8 +526,13 @@ class Interpreter():
             z = x or y
             return z
         elif e.type == "NOT":
-            x = not(self.recursive_interpret(e.e1))
-            return x
+
+            x = (self.recursive_interpret(e.e1))
+            if ( x == "true"):
+                return False
+            elif (type(x)== str() and x == "false"):
+                return True
+            return not x
         elif e.type == "IFExpr":
             a = self.recursive_interpret(e.b)
             if(a == "true"):
@@ -537,8 +547,8 @@ class Interpreter():
             # a = self.recursive_interpret(e.b)
             # print("a is", a)
             # while(a == "true" or a == True):
-            while (self.recursive_interpret(e.b)  == "true") or (self.recursive_interpret(e.b) == True):
-                self.recursive_interpret(e.c)
+            while (self.recursive_interpret(e.b) == (True or "true")):
+                (self.recursive_interpret(e.c))
             return
         elif e.type == "SEMI":
             left = self.recursive_interpret(e.e1)
@@ -585,6 +595,8 @@ while True:
 
         except EOFError:
             break
+
+# text = "if ¬ true then x := 1 else Y := 1"
 #calls the necessary functions and releases an output
 toke = Tokenizer(text)
 parse = Parser(toke)
