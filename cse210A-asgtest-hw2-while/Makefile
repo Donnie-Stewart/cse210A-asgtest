@@ -8,3 +8,6 @@ all:
 
 test:
 	python3 while.py
+
+clean: 
+	rm while
