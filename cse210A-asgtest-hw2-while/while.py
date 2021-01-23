@@ -229,6 +229,9 @@ class Var():
 class AssignExpr(Expession):
     def __init__(self,expr1, expr2):
         super().__init__(expr1, "ASSIGN", expr2)
+class SkipExpr(Expession):
+    def __init__(self,expr1, expr2):
+        super().__init__(expr1, "SKIP", expr2)
 
 class SemiExpr(Expession):
     def __init__(self,expr1, expr2):
@@ -358,10 +361,13 @@ class Parser(object):
 
     def assign(self):
         tree = self.bools()
-        while self.current_token.type in ("ASSIGN"):
+        while self.current_token.type in ("ASSIGN", "SKIP"):
             if self.current_token.type == "ASSIGN":
                 self.current_token = self.tokenizer.create_next_token()
                 tree = AssignExpr(tree, self.bools())
+            if self.current_token.type == "SKIP":
+                self.current_token = self.tokenizer.create_next_token()
+                tree = SkipExpr(tree, self.bools())
 
         return tree
     def commands(self):
@@ -547,6 +553,8 @@ class Interpreter():
             x.value = self.recursive_interpret(e.e2)
             self.var_dict[x.name] = x.value
             # print(self.var_dict)
+        elif e.type == "SKIP":
+            return
 
 
             return
@@ -597,7 +605,7 @@ class Interpreter():
 #z8 := 5; z8 := z8 + 1
 #while x < 5 do x := x + 1; if x > 7 then x := x + 5 else x := x - 1
 
-input = "while x < 5 do x := x + 1; if x > 7 then x := x + 5 else x := x - 1; y := (x-1)"
+input = "if ( false ∨ 3 < y + X ) then l := lv + -1 else x := -4 - z ; while -1 - p = 2 - -3 ∧ false do while ( ¬ ( 2 * -2 < y * y ) ) do skip"
 tokens = Tokenizer(input)
 
 # for i in range(len(input)):
