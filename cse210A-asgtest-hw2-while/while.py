@@ -3,7 +3,7 @@
 #All the code below draws from insipration in the tutorial
 
 #tokens become elements derived form raw text
-
+from collections import OrderedDict
 
 class Token():
     def __init__(self, type, value):
@@ -578,7 +578,7 @@ class Interpreter():
     def interpret(self):
         return self.recursive_interpret(self.tree)
 
-# #recieves the input from stdin
+#recieves the input from stdin
 while True:
         try:
             text = input("")
@@ -588,12 +588,12 @@ while True:
 #calls the necessary functions and releases an output
 toke = Tokenizer(text)
 parse = Parser(toke)
-tree = parse.top()
+tree = parse.semi()
 y = Interpreter(tree)
 y.interpret()
 
 # print the variable dictionary in the proper format
-variables = y.var_dict
+variables = OrderedDict(sorted(y.var_dict.items())) 
 
 if(len(variables) == 0):
     final = "{" + "}"
@@ -622,13 +622,13 @@ else:
 #z8 := 5; z8 := z8 + 1
 #while x < 5 do x := x + 1; if x > 7 then x := x + 5 else x := x - 1
 
-# input = "if ( false ∨ 3 < y + X ) then l := lv + -1 else x := -4 - z ; while -1 - p = 2 - -3 ∧ false do while ( ¬ ( 2 * -2 < y * y ) ) do skip"
-# tokens = Tokenizer(input)
+input = "while false do x := 3"
+tokens = Tokenizer(input)
 
-# # for i in range(len(input)):
-# #     current = tokens.create_next_token()
-# #     if(current.type != "EOF"):
-# #         print("Token( {} , '{}')".format(current.type,current.value))
+# for i in range(len(input)):
+#     current = tokens.create_next_token()
+#     if(current.type != "EOF"):
+#         print("Token( {} , '{}')".format(current.type,current.value))
 
 # parse = Parser(tokens)
 # tree = parse.semi()
