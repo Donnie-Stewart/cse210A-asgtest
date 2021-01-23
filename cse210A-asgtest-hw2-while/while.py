@@ -431,33 +431,33 @@ class Interpreter():
             x = (e.e1)
             y = (e.e2)
             if self.check_var(x) and self.check_var(y):
-                return self.var_dict[x.name] + self.var_dict[y.name]
+                return self.var_dict[x.name][0] + self.var_dict[y.name][0]
             elif self.check_var(x) and  not self.check_var(y):
-                return self.var_dict[x.name] + self.recursive_interpret(y)
+                return self.var_dict[x.name][0] + self.recursive_interpret(y)
             elif not self.check_var(x) and self.check_var(y):
-                return self.recursive_interpret(x) + self.var_dict[y.name]
+                return self.recursive_interpret(x) + self.var_dict[y.name][0]
             return self.recursive_interpret(x) + self.recursive_interpret(y)
 
         elif e.type == "MINUS":
             x = (e.e1)
             y = (e.e2)
             if self.check_var(x) and self.check_var(y):
-                return self.var_dict[x.name] - self.var_dict[y.name]
+                return self.var_dict[x.name][0] - self.var_dict[y.name][0]
             elif self.check_var(x) and  not self.check_var(y):
-                return self.var_dict[x.name] - self.recursive_interpret(y)
+                return self.var_dict[x.name][0] - self.recursive_interpret(y)
             elif not self.check_var(x) and self.check_var(y):
-                return self.recursive_interpret(x) - self.var_dict[y.name]
+                return self.recursive_interpret(x) - self.var_dict[y.name][0]
             return self.recursive_interpret(x) - self.recursive_interpret(y)
 
         elif e.type == "MUL":
             x = (e.e1)
             y = (e.e2)
             if self.check_var(x) and self.check_var(y):
-                return self.var_dict[x.name] * self.var_dict[y.name]
+                return self.var_dict[x.name][0] * self.var_dict[y.name][0]
             elif self.check_var(x) and  not self.check_var(y):
-                return self.var_dict[x.name] * self.recursive_interpret(y)
+                return self.var_dict[x.name][0] * self.recursive_interpret(y)
             elif not self.check_var(x) and self.check_var(y):
-                return self.recursive_interpret(x) * self.var_dict[y.name]
+                return self.recursive_interpret(x) * self.var_dict[y.name][0]
             return self.recursive_interpret(x) * self.recursive_interpret(y)
 
         elif e.type == "BOOL":
@@ -466,13 +466,13 @@ class Interpreter():
             x = (e.e1)
             y = (e.e2)
             if self.check_var(x) and self.check_var(y):
-                z = self.var_dict[x.name] == self.var_dict[y.name]
+                z = self.var_dict[x.name][0] == self.var_dict[y.name][0]
                 return z
             elif self.check_var(x) and  not self.check_var(y):
-                z = self.var_dict[x.name] == self.recursive_interpret(y)
+                z = self.var_dict[x.name][0] == self.recursive_interpret(y)
                 return z
             elif not self.check_var(x) and self.check_var(y):
-                z = self.recursive_interpret(x) == self.var_dict[y.name]
+                z = self.recursive_interpret(x) == self.var_dict[y.name][0]
                 return z
             x = self.recursive_interpret(e.e1)
             y =  self.recursive_interpret(e.e2)
@@ -482,13 +482,13 @@ class Interpreter():
             x = (e.e1)
             y = (e.e2)
             if self.check_var(x) and self.check_var(y):
-                z = self.var_dict[x.name] < self.var_dict[y.name]
+                z = self.var_dict[x.name][0] < self.var_dict[y.name][0]
                 return z
             elif self.check_var(x) and  not self.check_var(y):
-                z = self.var_dict[x.name] < self.recursive_interpret(y)
+                z = self.var_dict[x.name][0] < self.recursive_interpret(y)
                 return z
             elif not self.check_var(x) and self.check_var(y):
-                z = self.recursive_interpret(x) < self.var_dict[y.name]
+                z = self.recursive_interpret(x) < self.var_dict[y.name][0]
                 return z
             x = self.recursive_interpret(e.e1)
             y =  self.recursive_interpret(e.e2)
@@ -498,13 +498,13 @@ class Interpreter():
             x = (e.e1)
             y = (e.e2)
             if self.check_var(x) and self.check_var(y):
-                z = self.var_dict[x.name] > self.var_dict[y.name]
+                z = self.var_dict[x.name][0] > self.var_dict[y.name][0]
                 return z
             elif self.check_var(x) and  not self.check_var(y):
-                z = self.var_dict[x.name] > self.recursive_interpret(y)
+                z = self.var_dict[x.name][0] > self.recursive_interpret(y)
                 return z
             elif not self.check_var(x) and self.check_var(y):
-                z = self.recursive_interpret(x) > self.var_dict[y.name]
+                z = self.recursive_interpret(x) > self.var_dict[y.name][0]
                 return z
             x = self.recursive_interpret(e.e1)
             y =  self.recursive_interpret(e.e2)
@@ -551,7 +551,7 @@ class Interpreter():
             x = self.recursive_interpret(e.e1)
             # print(x)
             x.value = self.recursive_interpret(e.e2)
-            self.var_dict[x.name] = x.value
+            self.var_dict[x.name] = (x.value,"keep")
             # print(self.var_dict)
             return
 
@@ -568,7 +568,7 @@ class Interpreter():
             return True
         elif e.type ==  "Var" and e.name not in self.var_dict:
             # if not in dict add new var and assign 0
-            self.var_dict[e.name] = 0
+            self.var_dict[e.name] = (0,"del")
             return True
         else:
             #other wise not a variable
@@ -594,7 +594,7 @@ y.interpret()
 
 # remove zero values
 for key,value in dict(y.var_dict).items():
-    if value == 0:
+    if value[1] == "del":
         del y.var_dict[key]
 
 # print the variable dictionary in the proper format
@@ -607,7 +607,7 @@ if(len(variables) == 0):
 else:
     final = "{"
     for key,value in variables.items():
-        final = final + str(key) + " → " + str(value) + ", "
+        final = final + str(key) + " → " + str(value[0]) + ", "
 
     final = final[:-2]
     final = final + "}"
