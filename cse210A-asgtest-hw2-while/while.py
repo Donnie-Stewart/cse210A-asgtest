@@ -530,7 +530,7 @@ class Interpreter():
             x = (self.recursive_interpret(e.e1))
             if ( x == "true"):
                 return False
-            elif (type(x)== str() and x == "false"):
+            elif ( x == "false"):
                 return True
             return not x
         elif e.type == "IFExpr":
