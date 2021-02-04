@@ -560,9 +560,11 @@ class Interpreter():
             return
         elif e.type == "SEMI":
             e.e1 = self.recursive_interpret(e.e1)
-            while self.recursive_interpret(e.e1) != None:
-                e.e1 = self.recursive_interpret(e.e1)
+            while e.e1 != None:
+                #where print tree function goes
                 print("hit")
+                e.e1 = self.recursive_interpret(e.e1)
+
                 pass
 
             right= self.recursive_interpret(e.e2)
