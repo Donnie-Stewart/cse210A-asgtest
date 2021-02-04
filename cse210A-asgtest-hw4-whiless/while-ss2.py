@@ -559,7 +559,6 @@ class Interpreter():
                 #where print tree function goes
                 print("hit")
                 e.e1 = self.recursive_interpret(e.e1)
-
                 pass
 
             right= self.recursive_interpret(e.e2)
@@ -573,10 +572,11 @@ class Interpreter():
             x = self.recursive_interpret(e.e1)
             # print(x)
             x.value = self.recursive_interpret(e.e2)
-            self.printTree(x,x.value)
+            #self.printTree(x,x.value)
             self.var_dict[x.name] = (x.value,"keep")
             # print(self.var_dict)
             # print("skip," ,self.tree.type)
+            self.printTree(SkipExpr("non", "sense"),e)
             if e.parent == "SEMI":
                 return SkipExpr("non", "sense")
             return
@@ -602,19 +602,22 @@ class Interpreter():
     def printTree(self,e1,e2):
         print("printTree")
         dict_string = self.dict2String()
-        if e1 is None and e2 is None:
+        if e1 is None and e2 is None: # both are none 
             return
-        elif e1.type == "SKIP" and e2 is None:
+        elif e1.type == "SKIP" and e2 is None: # skip and e2
             print("skip, " + dict_string)
-        elif e1.type == "SKIP" and e2 is not None:
+        elif e1.type == "SKIP" and e2 is not None: # skip and None
             print("skip; " + self.printExpr(e2) + ", " + dict_string + "\n")
-        elif e1 is not None and e2 is None: 
+        elif e1 is not None and e2 is None:  # e1 and None
             print(self.printExpr(e1) + ", " + dict_string + "\n")
-        else:
+        else: # e1 and e2
             print(self.printExpr(e1) + "; " + self.printExpr(e2) + ", " + dict_string + "\n")
         return 
     
     def printExpr(self,e):
+
+        if e is None:
+            return "None"
         if e.type == "WHILEExpr":
             final = "while (" + self.printExpr(e.b) + ") do { " + self.printExpr(e.c) + " }" 
         elif e.type == "IFExpr":
@@ -641,8 +644,10 @@ class Interpreter():
             final = self.printExpr(e.e1) + "-" + self.printExpr(e.e2)
         elif e.type == "PLUS":
             final = self.printExpr(e.e1) + "+" + self.printExpr(e.e2)
+        elif e.type == "Var":
+            final = str(e.name)
         elif e.type == "BOOL" or e.type == "Num":
-            final = e.value
+            final = str(e.value)
         else:
             print("PRINT EXPRESSION ERROR")
             final = None
@@ -675,7 +680,7 @@ class Interpreter():
 #         except EOFError:
 #             break
 
-text = "x := 3 ; if ( x < 5 ) then x := x + 1 else x := x - 1"
+text = "x := 5 ; if ( x = 5 ) then x := x + 1 else x := x - 1"
 #calls the necessary functions and releases an output
 toke = Tokenizer(text)
 parse = Parser(toke)
