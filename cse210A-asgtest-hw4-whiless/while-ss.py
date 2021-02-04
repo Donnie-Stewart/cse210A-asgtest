@@ -164,6 +164,7 @@ class Expession():
         self.e1 = e1
         self.type = type
         self.e2 = e2
+        self.parent = None
 
 class Num():
     #number element of the tree
@@ -171,6 +172,7 @@ class Num():
         self.token = token
         self.value = token.value
         self.type = "Num"
+        self.parent = None
 
 class SumExpr(Expession):
     #for adding two expressions
@@ -193,6 +195,7 @@ class BOOL():
         self.token = token
         self.value = token.value
         self.type = "BOOL"
+        self.parent = None
 
 class AndExpr(Expession):
     def __init__(self, expr1, expr2):
@@ -225,6 +228,7 @@ class Var():
         self.name = token.value
         self.value = 0
         self.type = "Var"
+        self.parent = None
 
 class AssignExpr(Expession):
     def __init__(self,expr1, expr2):
@@ -249,6 +253,7 @@ class IfExpr():
         self.c1 = expr2
         self.c2 = expr3
         self.type = "IFExpr"
+        self.parent = None
 
 
 class Parser(object):
@@ -368,6 +373,8 @@ class Parser(object):
         while self.current_token.type in ("ASSIGN", "SKIP"):
             if self.current_token.type == "ASSIGN":
                 self.current_token = self.tokenizer.create_next_token()
+                #set parent here ex tree.parent =
+                tree.parent = "ASSIGN"
                 tree = AssignExpr(tree, self.bools())
             if self.current_token.type == "SKIP":
                 self.current_token = self.tokenizer.create_next_token()
@@ -413,6 +420,7 @@ class Parser(object):
         while self.current_token.type in ("SEMI"):
             if self.current_token.value == ";":
                 self.current_token = self.tokenizer.create_next_token()
+                tree.parent = "SEMI"
                 tree = SemiExpr(tree, self.commands())
         return tree
 
@@ -427,7 +435,7 @@ class Interpreter():
     def recursive_interpret(self, e):
         #simple recursive function to iterate through the tree
         #print("E is ", e)
-        # print(e.type)
+        print(e.type)
         if e.type == "Num":
             #print(e.value)
             return e.value
@@ -551,18 +559,28 @@ class Interpreter():
                 (self.recursive_interpret(e.c))
             return
         elif e.type == "SEMI":
-            left = self.recursive_interpret(e.e1)
+            e.e1 = self.recursive_interpret(e.e1)
+            while self.recursive_interpret(e.e1) != None:
+                e.e1 = self.recursive_interpret(e.e1)
+                print("hit")
+                pass
+
             right= self.recursive_interpret(e.e2)
             return
 
         elif e.type == "Var":
+            # print("my papa",e.parent)
             return e
         elif e.type == "ASSIGN":
+            # print("my papa",e.parent)
             x = self.recursive_interpret(e.e1)
             # print(x)
             x.value = self.recursive_interpret(e.e2)
             self.var_dict[x.name] = (x.value,"keep")
             # print(self.var_dict)
+            # print("skip," ,self.tree.type)
+            if e.parent == "SEMI":
+                return SkipExpr("non", "sense")
             return
 
         elif e.type == "SKIP":
@@ -589,81 +607,81 @@ class Interpreter():
         return self.recursive_interpret(self.tree)
 
 #recieves the input from stdin
-while True:
-        try:
-            text = input("")
+# while True:
+#         try:
+#             text = input("")
+#
+#         except EOFError:
+#             break
 
-        except EOFError:
-            break
-
-# text = "if ¬ true then x := 1 else Y := 1"
+text = "x := 3 ; if ( x < 5 ) then x := x + 1 else x := x - 1"
 #calls the necessary functions and releases an output
 toke = Tokenizer(text)
 parse = Parser(toke)
 tree = parse.semi()
 y = Interpreter(tree)
 y.interpret()
-
+print(y.var_dict)
 # remove zero values
-for key,value in dict(y.var_dict).items():
-    if value[1] == "del":
-        del y.var_dict[key]
-
-# print the variable dictionary in the proper format
-variables = OrderedDict(sorted(y.var_dict.items()))
-
-
-if(len(variables) == 0):
-    final = "{" + "}"
-    print(final)
-else:
-    final = "{"
-    for key,value in variables.items():
-        final = final + str(key) + " → " + str(value[0]) + ", "
-
-    final = final[:-2]
-    final = final + "}"
-    print(final)
-
-############################################################
-#hi surya these are test strings for you to try:
-#(false ∨ true) ∧ (true ∨ false)
-#(2 * 4 < 100 ∧ -1 = 0 + 1)
-#(2 * 4 < 100 ∧ -1 = -2 + 1)
-#true = true ∧ -1 < 2
-#¬(true ∨ false)
-#¬{(2 * 4 < 100 ∧ -1 = -2 + 1)}
-#¬true
-# if true then true else false
-# if 5 > 10 ∧ 3 < 6 then 1 else 0
-# while true do 69
-#z8 := 5; z8 := z8 + 1
-#while x < 5 do x := x + 1; if x > 7 then x := x + 5 else x := x - 1
-
-# input = "while x < 5 do x := x + 1"
-# tokens = Tokenizer(input)
-
-# for i in range(len(input)):
-#     current = tokens.create_next_token()
-#     if(current.type != "EOF"):
-#         print("Token( {} , '{}')".format(current.type,current.value))
-
-# parse = Parser(tokens)
-# tree = parse.semi()
-# y = Interpreter(tree)
-# y.interpret()
-
+# for key,value in dict(y.var_dict).items():
+#     if value[1] == "del":
+#         del y.var_dict[key]
+#
 # # print the variable dictionary in the proper format
-# variables = y.var_dict
-
+# variables = OrderedDict(sorted(y.var_dict.items()))
+#
+#
 # if(len(variables) == 0):
 #     final = "{" + "}"
 #     print(final)
 # else:
 #     final = "{"
 #     for key,value in variables.items():
-#         final = final + str(key) + " → " + str(value) + ", "
-
+#         final = final + str(key) + " → " + str(value[0]) + ", "
+#
 #     final = final[:-2]
 #     final = final + "}"
 #     print(final)
+#
+# ############################################################
+# #hi surya these are test strings for you to try:
+# #(false ∨ true) ∧ (true ∨ false)
+# #(2 * 4 < 100 ∧ -1 = 0 + 1)
+# #(2 * 4 < 100 ∧ -1 = -2 + 1)
+# #true = true ∧ -1 < 2
+# #¬(true ∨ false)
+# #¬{(2 * 4 < 100 ∧ -1 = -2 + 1)}
+# #¬true
+# # if true then true else false
+# # if 5 > 10 ∧ 3 < 6 then 1 else 0
+# # while true do 69
+# #z8 := 5; z8 := z8 + 1
+# #while x < 5 do x := x + 1; if x > 7 then x := x + 5 else x := x - 1
+#
+# input = "x := 3 ; if ( x < 5 ) then x := x + 1 else x := x - 1"
+# tokens = Tokenizer(input)
+#
+# # for i in range(len(input)):
+# #     current = tokens.create_next_token()
+# #     if(current.type != "EOF"):
+# #         print("Token( {} , '{}')".format(current.type,current.value))
+#
+# parse = Parser(tokens)
+# tree = parse.semi()
+# y = Interpreter(tree)
+# y.interpret()
+# print(y.var_dict)
+# # # print the variable dictionary in the proper format
+# # variables = y.var_dict
+#
+# # if(len(variables) == 0):
+# #     final = "{" + "}"
+# #     print(final)
+# # else:
+# #     final = "{"
+# #     for key,value in variables.items():
+# #         final = final + str(key) + " → " + str(value) + ", "
+#
+# #     final = final[:-2]
+# #     final = final + "}"
+# #     print(final)
