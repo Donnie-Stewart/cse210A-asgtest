@@ -581,6 +581,8 @@ class Interpreter():
             while (self.recursive_interpret(e.b) == (True or "true")):
                 (self.recursive_interpret(e.c))
             return
+
+
         elif e.type == "SEMI":
             #small step eval of e1
             diff = e.e1
@@ -744,6 +746,10 @@ class Interpreter():
 # text = "{ a := 1 ; b := 2 } ; c := 3"
 # text = "x := 1"
 # text = "if true then x := 1 else x := 0"
+#text = "x := 1 * 9 ; if 5 < x then x := 2 - 2 else y := 9"
+###### special test case to fix ###################
+#text = "if x = 0 ∧ y < 4 then x := 1 else x := 3"
+####################################################
 #calls the necessary functions and releases an output
 toke = Tokenizer(text)
 parse = Parser(toke)
