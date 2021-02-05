@@ -4,7 +4,6 @@
 
 #tokens become elements derived form raw text
 from collections import OrderedDict
-
 class Token():
     def __init__(self, type, value):
         self.type = type
@@ -677,13 +676,12 @@ class Interpreter():
         return
 
     def printExpr(self,e):
-
         if e is None:
             return "None"
         if e.type == "WHILEExpr":
-            final = "while (" + self.printExpr(e.b) + ") do { " + self.printExpr(e.c) + " }"
+            final = "while " + self.printExpr(e.b) + " do { " + self.printExpr(e.c) + " }"
         elif e.type == "IFExpr":
-            final = "if (" + self.printExpr(e.b) + ") then { " + self.printExpr(e.c1) + " } else { " + self.printExpr(e.c2) + " }"
+            final = "if " + self.printExpr(e.b) + " then { " + self.printExpr(e.c1) + " } else { " + self.printExpr(e.c2) + " }"
         elif e.type == "ASSIGN":
             final = self.printExpr(e.e1) + " := " + self.printExpr(e.e2)
         elif e.type == "SEMI":
@@ -698,21 +696,21 @@ class Interpreter():
         elif e.type == "NOT":
             final = "¬" + self.printExpr(e.e1)
         elif e.type == "OR":
-            final = self.printExpr(e.e1) + "∨" + self.printExpr(e.e2)
+            final = "(" + self.printExpr(e.e1) + "∨" + self.printExpr(e.e2) + ")"
         elif e.type == "AND":
-            final = self.printExpr(e.e1) + "∧" + self.printExpr(e.e2)
+            final = "(" + self.printExpr(e.e1) + "∧" + self.printExpr(e.e2) + ")"
         elif e.type == "MORE":
-            final = self.printExpr(e.e1) + ">" + self.printExpr(e.e2)
+            final = "(" + self.printExpr(e.e1) + ">" + self.printExpr(e.e2) + ")"
         elif e.type == "LESS":
-            final = self.printExpr(e.e1) + "<" + self.printExpr(e.e2)
+            final = "(" + self.printExpr(e.e1) + "<" + self.printExpr(e.e2) + ")"
         elif e.type == "EQUAL":
-            final = self.printExpr(e.e1) + "=" + self.printExpr(e.e2)
+            final = "(" + self.printExpr(e.e1) + "=" + self.printExpr(e.e2) + ")"
         elif e.type == "MUL":
-            final = self.printExpr(e.e1) + "*" + self.printExpr(e.e2)
+            final = "(" + self.printExpr(e.e1) + "*" + self.printExpr(e.e2) + ")"
         elif e.type == "MINUS":
-            final = self.printExpr(e.e1) + "-" + self.printExpr(e.e2)
+            final = "(" + self.printExpr(e.e1) + "-" + self.printExpr(e.e2) + ")"
         elif e.type == "PLUS":
-            final = self.printExpr(e.e1) + "+" + self.printExpr(e.e2)
+            final = "(" + self.printExpr(e.e1) + "+" + self.printExpr(e.e2) + ")"
         elif e.type == "Var":
             final = str(e.name)
         elif e.type == "BOOL" or e.type == "Num":
