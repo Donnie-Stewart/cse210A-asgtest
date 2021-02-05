@@ -378,8 +378,7 @@ class Parser(object):
         while self.current_token.type in ("ASSIGN", "SKIP"):
             if self.current_token.type == "ASSIGN":
                 self.current_token = self.tokenizer.create_next_token()
-                #set parent here ex tree.parent =
-                tree.parent = "ASSIGN"
+
                 tree = AssignExpr(tree, self.bools())
             if self.current_token.type == "SKIP":
                 self.current_token = self.tokenizer.create_next_token()
@@ -425,7 +424,6 @@ class Parser(object):
         while self.current_token.type in ("SEMI"):
             if self.current_token.value == ";":
                 self.current_token = self.tokenizer.create_next_token()
-                tree.parent = "SEMI"
                 tree = SemiExpr(tree, self.commands())
         return tree
 
@@ -438,7 +436,10 @@ class Interpreter():
     def recursive_interpret(self, e):
         #simple recursive function to iterate through the tree
         #print("E is ", e)
-        # print(e.type)
+
+        if e is None:
+            return
+        print(e.type)
         if e.type == "Num":
             #print(e.value)
             return e.value
@@ -547,34 +548,63 @@ class Interpreter():
         elif e.type == "IFExpr":
             # print("in if:", e.parent)
             a = self.recursive_interpret(e.b)
-            if(a == "true"):
-                # z = self.recursive_interpret(e.c1)
-                return e.c1
-            elif(a == True):
-                # z = self.recursive_interpret(e.c1)
-                return e.c1
+            if e.parent !=None:
+                if(a == "true"):
+                    return e.c1
+                elif(a == "false"):
+                    return e.c2
+                elif(a == True):
+                    return e.c1
+                else:
+                    return e.c2
             else:
-                # print("else")
-                return e.c2
-                # z = self.recursive_interpret(e.c2)
-            return z
+                if(a == "true"):
+                    self.printTree(e.c1, None)
+                    z = self.recursive_interpret(e.c1)
+                    self.printTree(z, None)
+                elif(a == "false"):
+                    self.printTree(e.c2, None)
+                    z = self.recursive_interpret(e.c2)
+                    self.printTree(z, None)
+                elif(a == True):
+                    self.printTree(e.c1, None)
+                    z = self.recursive_interpret(e.c1)
+                    self.printTree(z, None)
+                else:
+                    self.printTree(e.c2, None)
+                    z = self.recursive_interpret(e.c2)
+                    self.printTree(z, None)
+                return z
+
         elif e.type == "WHILEExpr":
+
             while (self.recursive_interpret(e.b) == (True or "true")):
                 (self.recursive_interpret(e.c))
             return
         elif e.type == "SEMI":
             #small step eval of e1
+            diff = e.e1
             e.e1 = self.recursive_interpret(e.e1)
+
             while e.e1 != None:
-                #where print tree function goes
+                if e.parent == "SEMI":
+                    return e
+                print("printinf from e1")
                 self.printTree(e.e1, e.e2)
                 e.e1 = self.recursive_interpret(e.e1)
-            self.printTree(e.e1, e.e2)
+            if e.parent != "SEMI":
+                self.printTree(e.e1, e.e2)
+            #checks bottom level changes before continuing
+            if diff != e.e1 and e.e1 is None and e.parent == "SEMI":
+                return e
             #small step eval of e2
             e.e2 = self.recursive_interpret(e.e2)
+
             while e.e2 != None:
-                e.e2.parent = "SEMI"
-                #where print tree function goes
+                if e.parent == "SEMI":
+                    return e
+                # e.e2.parent = "SEMI"
+                print("printinf from e1")
                 self.printTree(e.e1, e.e2)
                 e.e2 = self.recursive_interpret(e.e2)
             # self.printTree(e.e1, e.e2)
@@ -589,15 +619,12 @@ class Interpreter():
             x = self.recursive_interpret(e.e1)
             # print(x)
             x.value = self.recursive_interpret(e.e2)
-            #self.printTree(x,x.value)
             self.var_dict[x.name] = (x.value,"keep")
-            # print(self.var_dict)
-            # print("skip," ,self.tree.type)
-            # self.printTree(SkipExpr("non", "sense"),e)
-            if e.parent == "SEMI":
+
+            if e.parent != None:
                 return SkipExpr("non", "sense")
-            # elif e.parent == "IFExpr":
-            #     return SkipExpr("non", "sense")
+            if e.parent == None:
+                self.printTree(SkipExpr("non", "sense"),None)
             return
 
         elif e.type == "SKIP":
@@ -629,9 +656,9 @@ class Interpreter():
             print(self.printExpr(e2) + ", " + dict_string + "\n")
         elif hasattr(e1, "type") and e1.type == "SKIP" and e2 is None: # skip and e2
             print("skip, " + dict_string)
-        elif e2.type == "SKIP" and e1 is None: # skip and e2
+        elif hasattr(e2, "type") and e2.type == "SKIP" and e1 is None: # skip and e2
             print("skip, " + dict_string)
-        elif e1.type == "SKIP" and e2 is not None: # skip and None
+        elif hasattr(e1, "type") and e1.type == "SKIP" and e2 is not None: # skip and None
             print("skip; " + self.printExpr(e2) + ", " + dict_string + "\n")
         else: # e1 and e2
             print(self.printExpr(e1) + "; " + self.printExpr(e2) + ", " + dict_string + "\n")
@@ -648,7 +675,14 @@ class Interpreter():
         elif e.type == "ASSIGN":
             final = self.printExpr(e.e1) + " := " + self.printExpr(e.e2)
         elif e.type == "SEMI":
-            final = self.printExpr(e.e1) + "; " + self.printExpr(e.e2)
+            # print("print1",e.e1.type)
+            # print("print2",e.e2.type)
+            if e.e1 is None:
+                final =  self.printExpr(e.e2)
+            elif e.e2 is None:
+                final =  self.printExpr(e.e1)
+            else:
+                final = self.printExpr(e.e1) + "; " + self.printExpr(e.e2)
         elif e.type == "NOT":
             final = "¬" + self.printExpr(e.e1)
         elif e.type == "OR":
@@ -671,6 +705,8 @@ class Interpreter():
             final = str(e.name)
         elif e.type == "BOOL" or e.type == "Num":
             final = str(e.value)
+        elif e.type == "SKIP":
+            final = "skip"
         else:
             print("PRINT EXPRESSION ERROR")
             final = None
@@ -703,14 +739,18 @@ class Interpreter():
 #         except EOFError:
 #             break
 
-text = "x := 3 ; if ( x < 5 ) then x := x + 1 else x := x - 1"
+# text = "x := 3 ; if ( x < 5 ) then x := x + 1 else x := x - 1"
+# text = "z := 26 ; { a := 1 ; b := 2 ; c := 3 }"
+# text = "{ a := 1 ; b := 2 } ; c := 3"
+# text = "x := 1"
+# text = "if true then x := 1 else x := 0"
 #calls the necessary functions and releases an output
 toke = Tokenizer(text)
 parse = Parser(toke)
 tree = parse.semi()
 y = Interpreter(tree)
 y.interpret()
-print(y.var_dict)
+# print(y.var_dict)
 # remove zero values
 # for key,value in dict(y.var_dict).items():
 #     if value[1] == "del":
