@@ -438,7 +438,7 @@ class Interpreter():
 
         if e is None:
             return
-        print(e.type)
+        #print(e.type)
         if e.type == "Num":
             #print(e.value)
             return e.value
@@ -576,9 +576,15 @@ class Interpreter():
                 return z
 
         elif e.type == "WHILEExpr":
-
-            while (self.recursive_interpret(e.b) == (True or "true")):
-                (self.recursive_interpret(e.c))
+            # if (self.recursive_interpret(e.b) == (False or "false")):
+            #     print("In while false")
+            #     self.printTree(SkipExpr("non", "sense"), None)
+            if (self.recursive_interpret(e.b) == (True or "true")):
+                self.printTree(e.c,e)
+                newExpr = SemiExpr(e.c,e)
+                self.recursive_interpret(newExpr)
+            else:
+                self.printTree(SkipExpr("non", "sense"), None)
             return
 
 
@@ -590,7 +596,7 @@ class Interpreter():
             while e.e1 != None:
                 if e.parent == "SEMI":
                     return e
-                print("printinf from e1")
+                #print("printinf from e1")
                 self.printTree(e.e1, e.e2)
                 e.e1 = self.recursive_interpret(e.e1)
             if e.parent != "SEMI":
@@ -605,7 +611,7 @@ class Interpreter():
                 if e.parent == "SEMI":
                     return e
                 # e.e2.parent = "SEMI"
-                print("printinf from e1")
+                #print("printinf from e1")
                 self.printTree(e.e1, e.e2)
                 e.e2 = self.recursive_interpret(e.e2)
             # self.printTree(e.e1, e.e2)
@@ -633,6 +639,11 @@ class Interpreter():
 
     def dict2String(self):
 
+        #remove zero values
+        for key,value in dict(self.var_dict).items():
+            if value[1] == "del":
+                del y.var_dict[key]
+
         variables = OrderedDict(sorted(self.var_dict.items()))
 
         if(len(variables) == 0):
@@ -641,28 +652,28 @@ class Interpreter():
             final = "{"
             for key,value in variables.items():
                 final = final + str(key) + " → " + str(value[0]) + ", "
-
+                #print(value[1])
             final = final[:-2]
             final = final + "}"
         return final
 
     def printTree(self,e1,e2):
-        print("printTree")
+        #print("printTree")
         dict_string = self.dict2String()
         if e1 is None and e2 is None: # both are none
             return
         elif e1 is not None and e2 is None:  # e1 and None
-            print(self.printExpr(e1) + ", " + dict_string + "\n")
+            print("⇒ " + self.printExpr(e1) + ", " + dict_string)
         elif e1 is  None and (e2 is not None and e2.type !=  "SKIP"):  # e1 and None
-            print(self.printExpr(e2) + ", " + dict_string + "\n")
+            print("⇒ " + self.printExpr(e2) + ", " + dict_string)
         elif hasattr(e1, "type") and e1.type == "SKIP" and e2 is None: # skip and e2
-            print("skip, " + dict_string)
-        elif hasattr(e2, "type") and e2.type == "SKIP" and e1 is None: # skip and e2
-            print("skip, " + dict_string)
-        elif hasattr(e1, "type") and e1.type == "SKIP" and e2 is not None: # skip and None
-            print("skip; " + self.printExpr(e2) + ", " + dict_string + "\n")
+            print("⇒ skip, " + dict_string)
+        elif hasattr(e2, "type") and e2.type == "SKIP" and e1 is None: # skip and none
+            print("⇒ skip, " + dict_string)
+        elif hasattr(e1, "type") and e1.type == "SKIP" and e2 is not None: # skip and e2
+            print("⇒ skip; " + self.printExpr(e2) + ", " + dict_string)
         else: # e1 and e2
-            print(self.printExpr(e1) + "; " + self.printExpr(e2) + ", " + dict_string + "\n")
+            print("⇒ " + self.printExpr(e1) + "; " + self.printExpr(e2) + ", " + dict_string)
         return
 
     def printExpr(self,e):
@@ -733,13 +744,14 @@ class Interpreter():
         return self.recursive_interpret(self.tree)
 
 #recieves the input from stdin
-# while True:
-#         try:
-#             text = input("")
-#
-#         except EOFError:
-#             break
-text = "x := 1"
+while True:
+        try:
+            text = input("")
+
+        except EOFError:
+            break
+# text = "while ¬ ( x < 0 ) do x := -1"
+# text = "while x = 0 do x := 3"
 # text = "x := 3 ; if ( x < 5 ) then x := x + 1 else x := x - 1"
 # text = "z := 26 ; { a := 1 ; b := 2 ; c := 3 }"
 # text = "{ a := 1 ; b := 2 } ; c := 3"
