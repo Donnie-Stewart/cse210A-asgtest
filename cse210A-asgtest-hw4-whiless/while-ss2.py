@@ -241,6 +241,8 @@ class SkipExpr(Expession):
 class SemiExpr(Expession):
     def __init__(self,expr1, expr2):
         super().__init__(expr1, "SEMI", expr2)
+        expr1.parent = "SEMI"
+        expr2.parent = "SEMI"
 
 class WhileExpr(Expession):
     def __init__(self,expr1, expr2):
@@ -251,10 +253,13 @@ class WhileExpr(Expession):
 class IfExpr():
     def __init__(self,expr1, expr2, expr3):
         self.b = expr1
+        expr2.parent = "IfExpr"
+        expr3.parent = "IfExpr"
         self.c1 = expr2
         self.c2 = expr3
         self.type = "IFExpr"
         self.parent = None
+
 
 class Parser(object):
     #recieves tokenized texts and parses it into a tree
@@ -433,7 +438,7 @@ class Interpreter():
     def recursive_interpret(self, e):
         #simple recursive function to iterate through the tree
         #print("E is ", e)
-        print(e.type)
+        # print(e.type)
         if e.type == "Num":
             #print(e.value)
             return e.value
@@ -540,28 +545,40 @@ class Interpreter():
                 return True
             return not x
         elif e.type == "IFExpr":
+            # print("in if:", e.parent)
             a = self.recursive_interpret(e.b)
             if(a == "true"):
-                z = self.recursive_interpret(e.c1)
+                # z = self.recursive_interpret(e.c1)
+                return e.c1
             elif(a == True):
-                z = self.recursive_interpret(e.c1)
+                # z = self.recursive_interpret(e.c1)
+                return e.c1
             else:
                 # print("else")
-                z = self.recursive_interpret(e.c2)
+                return e.c2
+                # z = self.recursive_interpret(e.c2)
             return z
         elif e.type == "WHILEExpr":
             while (self.recursive_interpret(e.b) == (True or "true")):
                 (self.recursive_interpret(e.c))
             return
         elif e.type == "SEMI":
+            #small step eval of e1
             e.e1 = self.recursive_interpret(e.e1)
             while e.e1 != None:
                 #where print tree function goes
-                print("hit")
+                self.printTree(e.e1, e.e2)
                 e.e1 = self.recursive_interpret(e.e1)
-                pass
+            self.printTree(e.e1, e.e2)
+            #small step eval of e2
+            e.e2 = self.recursive_interpret(e.e2)
+            while e.e2 != None:
+                e.e2.parent = "SEMI"
+                #where print tree function goes
+                self.printTree(e.e1, e.e2)
+                e.e2 = self.recursive_interpret(e.e2)
+            # self.printTree(e.e1, e.e2)
 
-            right= self.recursive_interpret(e.e2)
             return
 
         elif e.type == "Var":
@@ -576,14 +593,16 @@ class Interpreter():
             self.var_dict[x.name] = (x.value,"keep")
             # print(self.var_dict)
             # print("skip," ,self.tree.type)
-            self.printTree(SkipExpr("non", "sense"),e)
+            # self.printTree(SkipExpr("non", "sense"),e)
             if e.parent == "SEMI":
                 return SkipExpr("non", "sense")
+            # elif e.parent == "IFExpr":
+            #     return SkipExpr("non", "sense")
             return
 
         elif e.type == "SKIP":
             return
-    
+
     def dict2String(self):
 
         variables = OrderedDict(sorted(self.var_dict.items()))
@@ -602,24 +621,28 @@ class Interpreter():
     def printTree(self,e1,e2):
         print("printTree")
         dict_string = self.dict2String()
-        if e1 is None and e2 is None: # both are none 
+        if e1 is None and e2 is None: # both are none
             return
-        elif e1.type == "SKIP" and e2 is None: # skip and e2
+        elif e1 is not None and e2 is None:  # e1 and None
+            print(self.printExpr(e1) + ", " + dict_string + "\n")
+        elif e1 is  None and (e2 is not None and e2.type !=  "SKIP"):  # e1 and None
+            print(self.printExpr(e2) + ", " + dict_string + "\n")
+        elif hasattr(e1, "type") and e1.type == "SKIP" and e2 is None: # skip and e2
+            print("skip, " + dict_string)
+        elif e2.type == "SKIP" and e1 is None: # skip and e2
             print("skip, " + dict_string)
         elif e1.type == "SKIP" and e2 is not None: # skip and None
             print("skip; " + self.printExpr(e2) + ", " + dict_string + "\n")
-        elif e1 is not None and e2 is None:  # e1 and None
-            print(self.printExpr(e1) + ", " + dict_string + "\n")
         else: # e1 and e2
             print(self.printExpr(e1) + "; " + self.printExpr(e2) + ", " + dict_string + "\n")
-        return 
-    
+        return
+
     def printExpr(self,e):
 
         if e is None:
             return "None"
         if e.type == "WHILEExpr":
-            final = "while (" + self.printExpr(e.b) + ") do { " + self.printExpr(e.c) + " }" 
+            final = "while (" + self.printExpr(e.b) + ") do { " + self.printExpr(e.c) + " }"
         elif e.type == "IFExpr":
             final = "if (" + self.printExpr(e.b) + ") then { " + self.printExpr(e.c1) + " } else { " + self.printExpr(e.c2) + " }"
         elif e.type == "ASSIGN":
@@ -653,7 +676,7 @@ class Interpreter():
             final = None
         return final
 
-    
+
     def check_var(self, e):
         # print("in check var",e.type)
         #check if the current expression is a variable
@@ -680,7 +703,7 @@ class Interpreter():
 #         except EOFError:
 #             break
 
-text = "x := 5 ; if ( x = 5 ) then x := x + 1 else x := x - 1"
+text = "x := 3 ; if ( x < 5 ) then x := x + 1 else x := x - 1"
 #calls the necessary functions and releases an output
 toke = Tokenizer(text)
 parse = Parser(toke)
