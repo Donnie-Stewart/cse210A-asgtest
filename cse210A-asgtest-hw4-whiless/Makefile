@@ -1,7 +1,5 @@
-# all:
-# 	python3 while-ss.py
 test:
-	# pip install pyinstaller
+	pip install pyinstaller
 	pyinstaller --onefile while-ss.py
 	mv dist/while-ss .
 	rm while-ss.spec

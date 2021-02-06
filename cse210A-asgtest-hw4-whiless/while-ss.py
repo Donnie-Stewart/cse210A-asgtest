@@ -783,7 +783,6 @@ toke = Tokenizer(text)
 parse = Parser(toke)
 tree = parse.semi()
 y = Interpreter(tree)
-# while(y.steps < 9999 or ):
 y.interpret()
 # print(y.var_dict)
 # remove zero values

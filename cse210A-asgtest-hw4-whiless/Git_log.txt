@@ -1,0 +1,107 @@
+commit ef3144cb615869ade09c688286652d3daa91ae18
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Fri Feb 5 17:57:46 2021 -0800
+
+    updated while
+
+commit ab7653c4505d48686b2391600866bc72b0c08238
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Fri Feb 5 17:03:12 2021 -0800
+
+    connecting
+
+commit db9795ae917c9b4c2b0fa5352345c16afecf5ecf
+Author: sukeswan <suryakeswani@gmail.com>
+Date:   Fri Feb 5 16:47:08 2021 -0800
+
+    fixed hard 10 and 16
+
+commit a8a4fc26a0a220224692f2c115498fa30b1cd99c
+Author: sukeswan <suryakeswani@gmail.com>
+Date:   Fri Feb 5 16:01:23 2021 -0800
+
+    removed typo in test cases
+
+commit af707d75572e61d96f53715cd378d8aad08238b7
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Fri Feb 5 15:56:01 2021 -0800
+
+    random
+
+commit 557b2bdd09181121a121d0a893ad0bd3fdbc99c2
+Author: sukeswan <suryakeswani@gmail.com>
+Date:   Fri Feb 5 15:54:43 2021 -0800
+
+    more bug fixes
+
+commit cb64371eab1a654622bf816afda0df1e43e327a5
+Author: sukeswan <suryakeswani@gmail.com>
+Date:   Fri Feb 5 14:52:28 2021 -0800
+
+    added harness back
+
+commit 6ffb076e75573ef993b20745a21091b238148775
+Author: sukeswan <suryakeswani@gmail.com>
+Date:   Fri Feb 5 14:49:26 2021 -0800
+
+    removed medium test cases for debugging
+
+commit 4cdbcd505c755ed6a4b659b565f579d8b3a2595f
+Author: sukeswan <suryakeswani@gmail.com>
+Date:   Fri Feb 5 14:36:30 2021 -0800
+
+    added while and removed last easy test case for now
+
+commit 3b869f103aa092d79cab93d3589a2537fdf7352b
+Author: sukeswan <suryakeswani@gmail.com>
+Date:   Fri Feb 5 09:46:37 2021 -0800
+
+    added code for running test cases + delete old while-ss
+
+commit b54cb91c6479ed7ea1790af914da7ad4bf9c06e0
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Fri Feb 5 00:29:06 2021 -0800
+
+    case for you to try
+
+commit 48e9f5c923083307bd0b1d1623a9adbba01e122e
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Fri Feb 5 00:13:59 2021 -0800
+
+    single if statement was way harder than it needed to be
+
+commit 9266751dec846f464be98df60206b46d59058222
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Thu Feb 4 17:13:06 2021 -0800
+
+    first test case
+
+commit 07fb1f772815369c131cba87937abaa2f720db86
+Author: sukeswan <suryakeswani@gmail.com>
+Date:   Thu Feb 4 13:47:06 2021 -0800
+
+    updated print tree function
+
+commit 81d7f1de542e5479ca968f2fed23390cada77c1f
+Author: sukeswan <suryakeswani@gmail.com>
+Date:   Thu Feb 4 12:47:33 2021 -0800
+
+    added printTree
+
+commit ce7021f3957c6785031a7dbb8b9d3412ea419ea5
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Thu Feb 4 01:46:32 2021 -0800
+
+    slight mod for printing trees
+
+commit 556841635c166657e5a0b680f08cd1fb62ff9e53
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Thu Feb 4 01:44:27 2021 -0800
+
+    added parents, and basic small step logic
+
+commit 60547d172f568cb3f82f8008c60329c3a56f5dc7
+Author: sukeswan <suryakeswani@gmail.com>
+Date:   Wed Feb 3 18:58:58 2021 -0800
+
+    adding files from hw2
