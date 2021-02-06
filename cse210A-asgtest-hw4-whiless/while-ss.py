@@ -430,6 +430,7 @@ class Interpreter():
     def __init__(self, tree):
         self.tree = tree
         self.var_dict = {}
+        self.steps = -1
 
     def recursive_interpret(self, e):
         #simple recursive function to iterate through the tree
@@ -475,7 +476,6 @@ class Interpreter():
             return self.recursive_interpret(x) * self.recursive_interpret(y)
 
         elif e.type == "BOOL":
-            # print("asdf",e.value)
             return e.value
         elif e.type == "EQUAL":
             x = (e.e1)
@@ -650,14 +650,16 @@ class Interpreter():
         else:
             final = "{"
             for key,value in variables.items():
-                final = final + str(key) + " → " + str(value[0]) + ", "
+                if isinstance(value[0],Var) :
+                    final = final + str(key) + " → " + "0" + ", "
+                else:
+                    final = final + str(key) + " → " + str(value[0]) + ", "
                 #print(value[1])
             final = final[:-2]
             final = final + "}"
         return final
 
     def printTree(self,e1,e2):
-        #print("printTree")
         dict_string = self.dict2String()
         if e1 is None and e2 is None: # both are none
             return
@@ -673,6 +675,7 @@ class Interpreter():
             print("⇒ skip; " + self.printExpr(e2) + ", " + dict_string)
         else: # e1 and e2
             print("⇒ " + self.printExpr(e1) + "; " + self.printExpr(e2) + ", " + dict_string)
+        self.steps += 1
         return
 
     def printExpr(self,e):
@@ -748,7 +751,7 @@ while True:
 
         except EOFError:
             break
-# text = "while ¬ ( x < 0 ) do x := -1"
+# text = "{ while true do x := x - 3 }' '⇒ x := (x-3); while true do { x := (x-3) }"
 # text = "while x = 0 do x := 3"
 # text = "x := 3 ; if ( x < 5 ) then x := x + 1 else x := x - 1"
 # text = "z := 26 ; { a := 1 ; b := 2 ; c := 3 }"
@@ -764,6 +767,7 @@ toke = Tokenizer(text)
 parse = Parser(toke)
 tree = parse.semi()
 y = Interpreter(tree)
+# while(y.steps < 9999 or ):
 y.interpret()
 # print(y.var_dict)
 # remove zero values
