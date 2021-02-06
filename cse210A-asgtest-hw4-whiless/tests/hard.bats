@@ -13,7 +13,7 @@ load harness
 @test "hard-3" {
   check 'z := ( x8 + 1 ) * -4' '⇒ skip, {z → -4}'
 }
-git
+
 @test "hard-4" {
   check 'x := y - -2' '⇒ skip, {x → 2}'
 }
