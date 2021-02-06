@@ -767,12 +767,12 @@ class Interpreter():
         return self.recursive_interpret(self.tree)
 
 #recieves the input from stdin
-# while True:
-#         try:
-#             text = input("")
-#
-#         except EOFError:
-#             break
+while True:
+        try:
+            text = input("")
+
+        except EOFError:
+            break
 # text = "{ while true do x := x - 3 }' '⇒ x := (x-3); while true do { x := (x-3) }"
 # text = "while false do x := x + 1"
 # text = "x := 3 ; if ( x < 5 ) then x := x + 1 else x := x - 1"
@@ -782,7 +782,7 @@ class Interpreter():
 # text = "while false do x := 3"
 # text = "if true then x := 1 else x := 0"
 # text = "x := 1 * 9 ; if 5 < x then x := 2 - 2 else y := 9"
-text = "while true do x := x - 3"
+# text = "while true do x := x - 3"
 ###### special test case to fix ###################
 #text = "if x = 0 ∧ y < 4 then x := 1 else x := 3"
 ####################################################
