@@ -578,13 +578,27 @@ class Interpreter():
             # if (self.recursive_interpret(e.b) == (False or "false")):
             #     print("In while false")
             #     self.printTree(SkipExpr("non", "sense"), None)
-            if (self.recursive_interpret(e.b) == (True or "true")):
-                self.printTree(e.c,e)
-                newExpr = SemiExpr(e.c,e)
-                self.recursive_interpret(newExpr)
+            a = self.recursive_interpret(e.b)
+            if hasattr(e, "parent") and e.parent !=None:
+                while (self.recursive_interpret(e.b) == (True or "true")):
+                    # self.printTree(e.c,e)
+                    newExpr = SemiExpr(e.c,e)
+                    return newExpr
+                else:
+                    return SkipExpr("non", "sense")
+                return
+
             else:
-                self.printTree(SkipExpr("non", "sense"), None)
-            return
+                while (self.recursive_interpret(e.b) == (True or "true")):
+                    self.printTree(e.c,e)
+                    newExpr = SemiExpr(e.c,e)
+                    # newExpr.e1.parent = None
+                    # newExpr.e2.parent = None
+                    self.recursive_interpret(newExpr)
+                else:
+                    if not hasattr(e, "parent"):
+                        self.printTree(SkipExpr("non", "sense"), None)
+                return
 
 
         elif e.type == "SEMI":
@@ -752,13 +766,15 @@ while True:
         except EOFError:
             break
 # text = "{ while true do x := x - 3 }' '⇒ x := (x-3); while true do { x := (x-3) }"
-# text = "while x = 0 do x := 3"
+# text = "while false do x := x + 1"
 # text = "x := 3 ; if ( x < 5 ) then x := x + 1 else x := x - 1"
 # text = "z := 26 ; { a := 1 ; b := 2 ; c := 3 }"
 # text = "{ a := 1 ; b := 2 } ; c := 3"
-# text = "x := 1"
+# text = "while ¬ ( x < 0 ) do x := -1"
+# text = "while false do x := 3"
 # text = "if true then x := 1 else x := 0"
 # text = "x := 1 * 9 ; if 5 < x then x := 2 - 2 else y := 9"
+# text = "while false do x := 1 ; if true then y := 1 else z := 1"
 ###### special test case to fix ###################
 #text = "if x = 0 ∧ y < 4 then x := 1 else x := 3"
 ####################################################
