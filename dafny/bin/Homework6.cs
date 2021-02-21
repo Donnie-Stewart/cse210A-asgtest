@@ -9,7 +9,7 @@ using System;
 using System.Numerics;
 [assembly: DafnyAssembly.DafnySourceAttribute(@"
 // Dafny 3.0.0.30203
-// Command Line Options: /Users/donniestewart/Desktop/dafny/Homework6.dfy /verifyAllModules /compile:3 /spillTargetCode:1 /out:bin/Homework6
+// Command Line Options: /Users/donniestewart/Desktop/cse210A-asgtest/dafny/Homework6.dfy /verifyAllModules /compile:3 /spillTargetCode:1 /out:bin/Homework6
 // Homework6.dfy
 
 datatype Tree<T> = Leaf | Node(Tree<T>, Tree<T>, T)
@@ -31,7 +31,6 @@ function method length<T>(xs: List<T>): int
 function method append<T>(xs: List<T>, ys: List<T>): List<T>
   ensures xs == Nil ==> append(xs, ys) == ys
   ensures ys == Nil ==> append(xs, ys) == xs
-  ensures length(append(xs, ys)) == length(xs) + length(ys)
   decreases xs, ys
 {
   match xs
@@ -39,6 +38,20 @@ function method append<T>(xs: List<T>, ys: List<T>): List<T>
     ys
   case Cons(x, xs') =>
     Cons(x, append(xs', ys))
+}
+
+function method listContains<T(==)>(xs: List<T>, element: T): bool
+  ensures xs == Nil ==> listContains(xs, element) == false
+  decreases xs
+{
+  match xs
+  case Nil() =>
+    false
+  case Cons(x, xs') =>
+    if x == element then
+      true
+    else
+      listContains(xs', element)
 }
 
 method Main()
@@ -51,6 +64,7 @@ method Main()
   var list3: List<int> := append(list, list2);
   print ""list3="", list3, ""\n"";
   print ""length"", length(list3), ""\n"";
+  print ""t_f: "", listContains(list3, 7), ""\n"";
 }
 ")]
 
@@ -1921,18 +1935,18 @@ namespace _module {
 
   public partial class __default {
     public static BigInteger length<__T>(List<__T> xs) {
-      BigInteger _62___accumulator = BigInteger.Zero;
+      BigInteger _81___accumulator = BigInteger.Zero;
     TAIL_CALL_START: ;
       List<__T> _source0 = xs;
       if (_source0.is_Nil) {
-        return (BigInteger.Zero) + (_62___accumulator);
+        return (BigInteger.Zero) + (_81___accumulator);
       } else {
-        __T _63___mcc_h0 = ((List_Cons<__T>)_source0)._a0;
-        List<__T> _64___mcc_h1 = ((List_Cons<__T>)_source0)._a1;
-        List<__T> _65_xs_k = _64___mcc_h1;
-        __T _66_x = _63___mcc_h0;
-        _62___accumulator = (_62___accumulator) + (BigInteger.One);
-        List<__T> _in0 = _65_xs_k;
+        __T _82___mcc_h0 = ((List_Cons<__T>)_source0)._a0;
+        List<__T> _83___mcc_h1 = ((List_Cons<__T>)_source0)._a1;
+        List<__T> _84_xs_k = _83___mcc_h1;
+        __T _85_x = _82___mcc_h0;
+        _81___accumulator = (_81___accumulator) + (BigInteger.One);
+        List<__T> _in0 = _84_xs_k;
         xs = _in0;
         goto TAIL_CALL_START;
       }
@@ -1943,29 +1957,54 @@ namespace _module {
       if (_source1.is_Nil) {
         return ys;
       } else {
-        __T _67___mcc_h0 = ((List_Cons<__T>)_source1)._a0;
-        List<__T> _68___mcc_h1 = ((List_Cons<__T>)_source1)._a1;
-        List<__T> _69_xs_k = _68___mcc_h1;
-        __T _70_x = _67___mcc_h0;
-        return @List<__T>.create_Cons(_70_x, __default.append<__T>(_69_xs_k, ys));
+        __T _86___mcc_h0 = ((List_Cons<__T>)_source1)._a0;
+        List<__T> _87___mcc_h1 = ((List_Cons<__T>)_source1)._a1;
+        List<__T> _88_xs_k = _87___mcc_h1;
+        __T _89_x = _86___mcc_h0;
+        return @List<__T>.create_Cons(_89_x, __default.append<__T>(_88_xs_k, ys));
+      }
+    }
+    public static bool listContains<__T>(List<__T> xs, __T element)
+    {
+    TAIL_CALL_START: ;
+      List<__T> _source2 = xs;
+      if (_source2.is_Nil) {
+        return false;
+      } else {
+        __T _90___mcc_h0 = ((List_Cons<__T>)_source2)._a0;
+        List<__T> _91___mcc_h1 = ((List_Cons<__T>)_source2)._a1;
+        List<__T> _92_xs_k = _91___mcc_h1;
+        __T _93_x = _90___mcc_h0;
+        if (object.Equals(_93_x, element)) {
+          return true;
+        } else {
+          List<__T> _in1 = _92_xs_k;
+          __T _in2 = element;
+          xs = _in1;
+          element = _in2;
+          goto TAIL_CALL_START;
+        }
       }
     }
     public static void _Main()
     {
-      List<BigInteger> _71_list = List<BigInteger>.Default();
-      _71_list = @List<BigInteger>.create_Cons(BigInteger.Zero, @List<BigInteger>.create_Cons(new BigInteger(5), @List<BigInteger>.create_Nil()));
+      List<BigInteger> _94_list = List<BigInteger>.Default();
+      _94_list = @List<BigInteger>.create_Cons(BigInteger.Zero, @List<BigInteger>.create_Cons(new BigInteger(5), @List<BigInteger>.create_Nil()));
       Dafny.Helpers.Print(Dafny.Sequence<char>.FromString("list1="));
-      Dafny.Helpers.Print(_71_list);
+      Dafny.Helpers.Print(_94_list);
       Dafny.Helpers.Print(Dafny.Sequence<char>.FromString("\n"));
-      List<BigInteger> _72_list2 = List<BigInteger>.Default();
-      _72_list2 = @List<BigInteger>.create_Cons(BigInteger.One, @List<BigInteger>.create_Cons(new BigInteger(2), @List<BigInteger>.create_Nil()));
-      List<BigInteger> _73_list3;
-      _73_list3 = __default.append<BigInteger>(_71_list, _72_list2);
+      List<BigInteger> _95_list2 = List<BigInteger>.Default();
+      _95_list2 = @List<BigInteger>.create_Cons(BigInteger.One, @List<BigInteger>.create_Cons(new BigInteger(2), @List<BigInteger>.create_Nil()));
+      List<BigInteger> _96_list3;
+      _96_list3 = __default.append<BigInteger>(_94_list, _95_list2);
       Dafny.Helpers.Print(Dafny.Sequence<char>.FromString("list3="));
-      Dafny.Helpers.Print(_73_list3);
+      Dafny.Helpers.Print(_96_list3);
       Dafny.Helpers.Print(Dafny.Sequence<char>.FromString("\n"));
       Dafny.Helpers.Print(Dafny.Sequence<char>.FromString("length"));
-      Dafny.Helpers.Print(__default.length<BigInteger>(_73_list3));
+      Dafny.Helpers.Print(__default.length<BigInteger>(_96_list3));
+      Dafny.Helpers.Print(Dafny.Sequence<char>.FromString("\n"));
+      Dafny.Helpers.Print(Dafny.Sequence<char>.FromString("t_f: "));
+      Dafny.Helpers.Print(__default.listContains<BigInteger>(_96_list3, new BigInteger(7)));
       Dafny.Helpers.Print(Dafny.Sequence<char>.FromString("\n"));
     }
   }

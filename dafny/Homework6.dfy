@@ -18,7 +18,6 @@ ensures xs == Nil ==> length(xs) == 0
 function method append<T>(xs:List<T>, ys:List<T>):List<T>
 ensures xs == Nil ==> append(xs, ys) == ys
 ensures ys == Nil ==> append(xs, ys) == xs
-ensures length(append(xs, ys)) == length(xs) + length(ys)
 {
     match xs
         case Nil => ys
@@ -31,10 +30,14 @@ ensures length(append(xs, ys)) == length(xs) + length(ys)
 	
 // }
 
-// function listContains<T>(xs:List<T>, element:T):bool
-// {
-	
-// }
+function method listContains<T(==)>(xs:List<T>, element:T):bool
+ensures xs == Nil ==> listContains(xs, element) == false
+// ensures T >= 0
+{
+    match xs
+        case Nil => false
+        case Cons(x, xs') => if (x == element) then true else listContains(xs', element)
+}
 
 
 // lemma sameElements<T>(tree:Tree<T>, element:T)
@@ -61,7 +64,7 @@ print "length", length(list3), "\n";
 // print "x=", m, "\n";
 // assert m == 4;
 
-
+print "t_f: ", listContains(list3, 7), "\n";
     
 
 }
