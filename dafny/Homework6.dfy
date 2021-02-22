@@ -1,17 +1,11 @@
 datatype Tree<T> = Leaf | Node(Tree<T>, Tree<T>, T)
 datatype List<T> = Nil | Cons(T, List<T>)
 
-// function flatten<T>(tree:Tree<T>):List<T>
-// {
-	
-// }
-function method length <T>(xs:List<T>): int
-ensures length(xs) >= 0
-ensures xs == Nil ==> length(xs) == 0
+function flatten<T>(tree:Tree<T>):List<T>
 {
-    match xs
-        case Nil =>0
-        case Cons(x,xs') => 1+length(xs')
+	match tree
+        case Leaf => Nil
+        case Node(left, right, t) => Cons(t, append(flatten(left), flatten(right)))
 }
 
 
@@ -36,7 +30,7 @@ ensures xs == Nil ==> listContains(xs, element) == false
 {
     match xs
         case Nil => false
-        case Cons(x, xs') => if (x == element) then true else listContains(xs', element)
+        case Cons(x, xs') => (x == element) || listContains(xs', element)
 }
 
 
@@ -59,12 +53,11 @@ list2 := Cons(1, Cons(2, Nil));
 // list2 := Cons(8, list);
 var list3:List := append(list, list2);
 print "list3=", list3, "\n";
-print "length", length(list3), "\n";
 // var x : Tree := Node(Node(Empty, 1, Empty), 2, Empty);
 // print "x=", m, "\n";
 // assert m == 4;
 
-print "t_f: ", listContains(list3, 7), "\n";
+print "t_f: ", listContains(list3, 2), "\n";
     
 
 }
