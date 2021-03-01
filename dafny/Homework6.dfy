@@ -22,12 +22,11 @@ function append<T>(xs:List<T>, ys:List<T>):List<T>
 }
 
 function treeContains<T>(tree:Tree<T>, element:T):bool
-        ensures tree == Leaf ==> treeContains(tree,element) == false
-        ensures tree == Node(tree,tree,element) ==> treeContains(tree,element) == false || treeContains(tree,element) == true
+        decreases tree 
 {
         match tree
         case Leaf => false 
-        case Node(left, right, t) => listContains(flatten(tree),element)
+        case Node(left, right, t) => (t==element) || treeContains(left,element) || treeContains(right,element)
 }
 
 function listContains<T>(xs:List<T>, element:T):bool
@@ -39,17 +38,45 @@ function listContains<T>(xs:List<T>, element:T):bool
         case Cons(x, xs') => (x == element) || listContains(xs', element)
 }
 
+lemma appendListContains<T>(xs:List<T>,ys:List<T>,element:T)
+ensures listContains(xs,element) || listContains(ys,element) <==> listContains(append(xs,ys),element)
+        decreases xs 
+        decreases ys 
+{
+        match xs
+        case Nil => {
+                // assert listContains(Nil,element) || listContains(ys,element)
+                // == false || listContains(ys,element)
+                // == listContains(ys,element)
+                // == listContains(append(Nil,ys),element)
+                // ;
+        }
+        case Cons(x,xs') => {
+
+                appendListContains(xs',ys, element);
+
+                assert listContains(xs,element) || listContains(ys,element)
+                == listContains(Cons(x,xs'),element) || listContains(ys,element)
+                == (x == element) || listContains(xs',element) || listContains(ys,element)
+                == (x == element) || listContains(append(xs',ys),element)
+                == listContains(Cons(x,append(xs',ys)),element)
+                == listContains(append(Cons(x,xs'),ys),element)
+                == listContains(append(xs,ys),element)
+                ;
+        }
+}
 
 lemma sameElements<T>(tree:Tree<T>, element:T)
 ensures treeContains(tree, element) <==> listContains(flatten(tree), element)
+decreases tree 
 {
 	match tree
-        case Leaf => {
-                assert treeContains(Leaf,element)
-                == false 
-                ;
-        } 
+        case Leaf => {} 
         case Node(left, right, t) => {
+                sameElements(left,element);
+                sameElements(right,element);
+                appendListContains(flatten(left),flatten(right),element);
+
                 assert treeContains(Node(left, right, t), element)
                 == treeContains(left,element) || treeContains(right,element) || (t == element)
                 == listContains(flatten(left),element) || listContains(flatten(right),element) || (t == element)
