@@ -9,29 +9,28 @@ using System;
 using System.Numerics;
 [assembly: DafnyAssembly.DafnySourceAttribute(@"
 // Dafny 3.0.0.30203
-// Command Line Options: /Users/donniestewart/Desktop/cse210A-asgtest/dafny/Homework6.dfy /verifyAllModules /compile:3 /spillTargetCode:1 /out:bin/Homework6
+// Command Line Options: /Users/Surya/Desktop/cse210A-asgtest-Donnie/dafny/Homework6.dfy /verifyAllModules /compile:3 /spillTargetCode:1 /out:bin/Homework6
 // Homework6.dfy
 
 datatype Tree<T> = Leaf | Node(Tree<T>, Tree<T>, T)
 
 datatype List<T> = Nil | Cons(T, List<T>)
 
-function method length<T>(xs: List<T>): int
-  ensures length(xs) >= 0
-  ensures xs == Nil ==> length(xs) == 0
-  decreases xs
+function flatten<T>(tree: Tree<T>): List<T>
+  ensures tree == Leaf ==> flatten(tree) == Nil
+  decreases tree
 {
-  match xs
-  case Nil() =>
-    0
-  case Cons(x, xs') =>
-    1 + length(xs')
+  match tree
+  case Leaf() =>
+    Nil
+  case Node(left, right, t) =>
+    Cons(t, append(flatten(left), flatten(right)))
 }
 
-function method append<T>(xs: List<T>, ys: List<T>): List<T>
+function append<T>(xs: List<T>, ys: List<T>): List<T>
   ensures xs == Nil ==> append(xs, ys) == ys
   ensures ys == Nil ==> append(xs, ys) == xs
-  decreases xs, ys
+  decreases xs
 {
   match xs
   case Nil() =>
@@ -40,7 +39,17 @@ function method append<T>(xs: List<T>, ys: List<T>): List<T>
     Cons(x, append(xs', ys))
 }
 
-function method listContains<T(==)>(xs: List<T>, element: T): bool
+function treeContains<T>(tree: Tree<T>, element: T): bool
+  decreases tree
+{
+  match tree
+  case Leaf() =>
+    false
+  case Node(left, right, t) =>
+    t == element || treeContains(left, element) || treeContains(right, element)
+}
+
+function listContains<T>(xs: List<T>, element: T): bool
   ensures xs == Nil ==> listContains(xs, element) == false
   decreases xs
 {
@@ -48,23 +57,39 @@ function method listContains<T(==)>(xs: List<T>, element: T): bool
   case Nil() =>
     false
   case Cons(x, xs') =>
-    if x == element then
-      true
-    else
-      listContains(xs', element)
+    x == element || listContains(xs', element)
 }
 
-method Main()
+lemma /*{:_induction xs, ys}*/ appendListContains<T>(xs: List<T>, ys: List<T>, element: T)
+  ensures listContains(xs, element) || listContains(ys, element) <==> listContains(append(xs, ys), element)
+  decreases xs, ys
 {
-  var list: List<int>;
-  list := Cons(0, Cons(5, Nil));
-  print ""list1="", list, ""\n"";
-  var list2: List<int>;
-  list2 := Cons(1, Cons(2, Nil));
-  var list3: List<int> := append(list, list2);
-  print ""list3="", list3, ""\n"";
-  print ""length"", length(list3), ""\n"";
-  print ""t_f: "", listContains(list3, 7), ""\n"";
+  match xs
+  case Nil() =>
+    {
+    }
+  case Cons(x, xs') =>
+    {
+      appendListContains(xs', ys, element);
+      assert listContains(xs, element) || listContains(ys, element) == listContains(Cons(x, xs'), element) || listContains(ys, element) == (x == element) || listContains(xs', element) || listContains(ys, element) == (x == element) || listContains(append(xs', ys), element) == listContains(Cons(x, append(xs', ys)), element) == listContains(append(Cons(x, xs'), ys), element) == listContains(append(xs, ys), element);
+    }
+}
+
+lemma /*{:_induction tree}*/ sameElements<T>(tree: Tree<T>, element: T)
+  ensures treeContains(tree, element) <==> listContains(flatten(tree), element)
+  decreases tree
+{
+  match tree
+  case Leaf() =>
+    {
+    }
+  case Node(left, right, t) =>
+    {
+      sameElements(left, element);
+      sameElements(right, element);
+      appendListContains(flatten(left), flatten(right), element);
+      assert treeContains(Node(left, right, t), element) == treeContains(left, element) || treeContains(right, element) || (t == element) == listContains(flatten(left), element) || listContains(flatten(right), element) || (t == element) == listContains(append(flatten(left), flatten(right)), element) || (t == element) == listContains(Cons(t, append(flatten(left), flatten(right))), element) == listContains(flatten(tree), element);
+    }
 }
 ")]
 
@@ -1933,84 +1958,4 @@ namespace _module {
     }
   }
 
-  public partial class __default {
-    public static BigInteger length<__T>(List<__T> xs) {
-      BigInteger _81___accumulator = BigInteger.Zero;
-    TAIL_CALL_START: ;
-      List<__T> _source0 = xs;
-      if (_source0.is_Nil) {
-        return (BigInteger.Zero) + (_81___accumulator);
-      } else {
-        __T _82___mcc_h0 = ((List_Cons<__T>)_source0)._a0;
-        List<__T> _83___mcc_h1 = ((List_Cons<__T>)_source0)._a1;
-        List<__T> _84_xs_k = _83___mcc_h1;
-        __T _85_x = _82___mcc_h0;
-        _81___accumulator = (_81___accumulator) + (BigInteger.One);
-        List<__T> _in0 = _84_xs_k;
-        xs = _in0;
-        goto TAIL_CALL_START;
-      }
-    }
-    public static List<__T> append<__T>(List<__T> xs, List<__T> ys)
-    {
-      List<__T> _source1 = xs;
-      if (_source1.is_Nil) {
-        return ys;
-      } else {
-        __T _86___mcc_h0 = ((List_Cons<__T>)_source1)._a0;
-        List<__T> _87___mcc_h1 = ((List_Cons<__T>)_source1)._a1;
-        List<__T> _88_xs_k = _87___mcc_h1;
-        __T _89_x = _86___mcc_h0;
-        return @List<__T>.create_Cons(_89_x, __default.append<__T>(_88_xs_k, ys));
-      }
-    }
-    public static bool listContains<__T>(List<__T> xs, __T element)
-    {
-    TAIL_CALL_START: ;
-      List<__T> _source2 = xs;
-      if (_source2.is_Nil) {
-        return false;
-      } else {
-        __T _90___mcc_h0 = ((List_Cons<__T>)_source2)._a0;
-        List<__T> _91___mcc_h1 = ((List_Cons<__T>)_source2)._a1;
-        List<__T> _92_xs_k = _91___mcc_h1;
-        __T _93_x = _90___mcc_h0;
-        if (object.Equals(_93_x, element)) {
-          return true;
-        } else {
-          List<__T> _in1 = _92_xs_k;
-          __T _in2 = element;
-          xs = _in1;
-          element = _in2;
-          goto TAIL_CALL_START;
-        }
-      }
-    }
-    public static void _Main()
-    {
-      List<BigInteger> _94_list = List<BigInteger>.Default();
-      _94_list = @List<BigInteger>.create_Cons(BigInteger.Zero, @List<BigInteger>.create_Cons(new BigInteger(5), @List<BigInteger>.create_Nil()));
-      Dafny.Helpers.Print(Dafny.Sequence<char>.FromString("list1="));
-      Dafny.Helpers.Print(_94_list);
-      Dafny.Helpers.Print(Dafny.Sequence<char>.FromString("\n"));
-      List<BigInteger> _95_list2 = List<BigInteger>.Default();
-      _95_list2 = @List<BigInteger>.create_Cons(BigInteger.One, @List<BigInteger>.create_Cons(new BigInteger(2), @List<BigInteger>.create_Nil()));
-      List<BigInteger> _96_list3;
-      _96_list3 = __default.append<BigInteger>(_94_list, _95_list2);
-      Dafny.Helpers.Print(Dafny.Sequence<char>.FromString("list3="));
-      Dafny.Helpers.Print(_96_list3);
-      Dafny.Helpers.Print(Dafny.Sequence<char>.FromString("\n"));
-      Dafny.Helpers.Print(Dafny.Sequence<char>.FromString("length"));
-      Dafny.Helpers.Print(__default.length<BigInteger>(_96_list3));
-      Dafny.Helpers.Print(Dafny.Sequence<char>.FromString("\n"));
-      Dafny.Helpers.Print(Dafny.Sequence<char>.FromString("t_f: "));
-      Dafny.Helpers.Print(__default.listContains<BigInteger>(_96_list3, new BigInteger(7)));
-      Dafny.Helpers.Print(Dafny.Sequence<char>.FromString("\n"));
-    }
-  }
 } // end of namespace _module
-class __CallToMain {
-  public static void Main(string[] args) {
-    Dafny.Helpers.WithHaltHandling(_module.__default._Main);
-  }
-}

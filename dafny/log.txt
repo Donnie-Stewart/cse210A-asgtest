@@ -1,0 +1,582 @@
+commit 11a95c39bf7c78546ab3f2fa2e8d3a93369b1624
+Author: sukeswan <suryakeswani@gmail.com>
+Date:   Mon Mar 1 14:07:23 2021 -0800
+
+    everything works
+
+commit e2a0669ce2038770f85923c6f1e032143f324af8
+Author: sukeswan <suryakeswani@gmail.com>
+Date:   Sun Feb 28 16:48:05 2021 -0800
+
+    lemma is wrong damnit
+
+commit e9c1e323fc923c1e16e0b8663cd0bad9d6984b27
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Thu Feb 25 16:03:36 2021 -0800
+
+    cleaner
+
+commit a2d5bf87989c307b9650760c7550ca55b0a4dbe0
+Author: sukeswan <suryakeswani@gmail.com>
+Date:   Thu Feb 25 15:38:08 2021 -0800
+
+    tree contains body
+
+commit 47fa122c59d957959bdda3c8b043950b25671cf3
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Wed Feb 24 18:57:43 2021 -0800
+
+    surya's turn
+
+commit 3e557480ced8a0baef96a7a13831296e1fe1439c
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Mon Feb 22 14:17:16 2021 -0800
+
+    flatten basics
+
+commit 67f734f391a4033fcba7ee48beec5761cd7cb6ef
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Sat Feb 20 23:41:10 2021 -0800
+
+    list contains
+
+commit 323ee06c773b12fad27f84798085ad4fe01eb08a
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Sat Feb 20 22:51:29 2021 -0800
+
+    initial commit + append + sanity check
+
+commit 191f34c5e568d432b57d6cd752fd2c731f45d7f9
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Fri Feb 5 20:29:44 2021 -0800
+
+    there we go again
+
+commit 193f411e7776c2cdb4d7d0f564d28c555bb56507
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Fri Feb 5 20:29:05 2021 -0800
+
+    there we go
+
+commit 793d0233d401beec07f6acf2f0858653c5ac7451
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Fri Feb 5 20:13:17 2021 -0800
+
+    testing
+
+commit 636afd298883b9768da954907d14d73f679c0f32
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Fri Feb 5 20:12:42 2021 -0800
+
+    while case
+
+commit 16d68eaba802bd8974585eed358aa9def5707545
+Author: sukeswan <suryakeswani@gmail.com>
+Date:   Fri Feb 5 19:25:59 2021 -0800
+
+    final docs
+
+commit ef3144cb615869ade09c688286652d3daa91ae18
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Fri Feb 5 17:57:46 2021 -0800
+
+    updated while
+
+commit ab7653c4505d48686b2391600866bc72b0c08238
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Fri Feb 5 17:03:12 2021 -0800
+
+    connecting
+
+commit db9795ae917c9b4c2b0fa5352345c16afecf5ecf
+Author: sukeswan <suryakeswani@gmail.com>
+Date:   Fri Feb 5 16:47:08 2021 -0800
+
+    fixed hard 10 and 16
+
+commit a8a4fc26a0a220224692f2c115498fa30b1cd99c
+Author: sukeswan <suryakeswani@gmail.com>
+Date:   Fri Feb 5 16:01:23 2021 -0800
+
+    removed typo in test cases
+
+commit af707d75572e61d96f53715cd378d8aad08238b7
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Fri Feb 5 15:56:01 2021 -0800
+
+    random
+
+commit 557b2bdd09181121a121d0a893ad0bd3fdbc99c2
+Author: sukeswan <suryakeswani@gmail.com>
+Date:   Fri Feb 5 15:54:43 2021 -0800
+
+    more bug fixes
+
+commit cb64371eab1a654622bf816afda0df1e43e327a5
+Author: sukeswan <suryakeswani@gmail.com>
+Date:   Fri Feb 5 14:52:28 2021 -0800
+
+    added harness back
+
+commit 6ffb076e75573ef993b20745a21091b238148775
+Author: sukeswan <suryakeswani@gmail.com>
+Date:   Fri Feb 5 14:49:26 2021 -0800
+
+    removed medium test cases for debugging
+
+commit 4cdbcd505c755ed6a4b659b565f579d8b3a2595f
+Author: sukeswan <suryakeswani@gmail.com>
+Date:   Fri Feb 5 14:36:30 2021 -0800
+
+    added while and removed last easy test case for now
+
+commit 3b869f103aa092d79cab93d3589a2537fdf7352b
+Author: sukeswan <suryakeswani@gmail.com>
+Date:   Fri Feb 5 09:46:37 2021 -0800
+
+    added code for running test cases + delete old while-ss
+
+commit b54cb91c6479ed7ea1790af914da7ad4bf9c06e0
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Fri Feb 5 00:29:06 2021 -0800
+
+    case for you to try
+
+commit 48e9f5c923083307bd0b1d1623a9adbba01e122e
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Fri Feb 5 00:13:59 2021 -0800
+
+    single if statement was way harder than it needed to be
+
+commit 9266751dec846f464be98df60206b46d59058222
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Thu Feb 4 17:13:06 2021 -0800
+
+    first test case
+
+commit 07fb1f772815369c131cba87937abaa2f720db86
+Author: sukeswan <suryakeswani@gmail.com>
+Date:   Thu Feb 4 13:47:06 2021 -0800
+
+    updated print tree function
+
+commit 81d7f1de542e5479ca968f2fed23390cada77c1f
+Author: sukeswan <suryakeswani@gmail.com>
+Date:   Thu Feb 4 12:47:33 2021 -0800
+
+    added printTree
+
+commit ce7021f3957c6785031a7dbb8b9d3412ea419ea5
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Thu Feb 4 01:46:32 2021 -0800
+
+    slight mod for printing trees
+
+commit 556841635c166657e5a0b680f08cd1fb62ff9e53
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Thu Feb 4 01:44:27 2021 -0800
+
+    added parents, and basic small step logic
+
+commit 60547d172f568cb3f82f8008c60329c3a56f5dc7
+Author: sukeswan <suryakeswani@gmail.com>
+Date:   Wed Feb 3 18:58:58 2021 -0800
+
+    adding files from hw2
+
+commit 9b132bf81aced9273c7a0e14e08d1c7a5b96c6ba
+Merge: 98efe06 90629fe
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Fri Jan 22 23:29:55 2021 -0800
+
+    Merge branch 'master' of github.com:Donnie-Stewart/cse210A-asgtest
+
+commit 98efe0625f4795b3f10626debb03255bf4857d39
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Fri Jan 22 23:29:35 2021 -0800
+
+    test cases screen shot
+
+commit 90629feca0454ca4e956650f312478e7efc718bb
+Merge: 13aab29 2933e42
+Author: sukeswan <suryakeswani@gmail.com>
+Date:   Fri Jan 22 23:25:22 2021 -0800
+
+    Merge branch 'master' of https://github.com/Donnie-Stewart/cse210A-asgtest
+
+commit 13aab298c9bd7b2c58e01c8cc93d450d57a6bdaa
+Author: sukeswan <suryakeswani@gmail.com>
+Date:   Fri Jan 22 23:25:03 2021 -0800
+
+    final changes
+
+commit 2933e425165afc6a7634d90d6e8049370861a61b
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Fri Jan 22 23:24:46 2021 -0800
+
+    last commit
+
+commit 48953f5420a0191c6d30eb0ddc42510bfc44ec37
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Fri Jan 22 23:17:53 2021 -0800
+
+    four to go
+
+commit d72b1368d89d8cbdea7dbf1749690a30f56c302e
+Merge: 1f0fc52 db6f58f
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Fri Jan 22 22:36:50 2021 -0800
+
+    Merge branch 'master' of github.com:Donnie-Stewart/cse210A-asgtest
+
+commit 1f0fc52e786e334943dbdad9d41514f06eda9dbf
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Fri Jan 22 22:36:07 2021 -0800
+
+    random
+
+commit db6f58f87b9dfdd51fbd3b7b896fd18c8b27780e
+Author: sukeswan <suryakeswani@gmail.com>
+Date:   Fri Jan 22 22:30:08 2021 -0800
+
+    while false fixed
+
+commit d5455dd560b77b12a1aa80740abd4d29343f8176
+Author: sukeswan <suryakeswani@gmail.com>
+Date:   Fri Jan 22 22:01:41 2021 -0800
+
+    added flags for unset values in dict
+
+commit d9549348dae6674bd0b6b785d3d72113f432bf40
+Author: sukeswan <suryakeswani@gmail.com>
+Date:   Fri Jan 22 21:54:57 2021 -0800
+
+    deleted unset variables from dict
+
+commit b5b09a602378e6914ed2ba90ca4a5f251ada18a4
+Author: sukeswan <suryakeswani@gmail.com>
+Date:   Fri Jan 22 21:35:22 2021 -0800
+
+    fixed  dict to be ordered
+
+commit a4e395abbbadb7dcdcac317a05fff4d2332aa115
+Author: sukeswan <suryakeswani@gmail.com>
+Date:   Fri Jan 22 21:10:52 2021 -0800
+
+    updated to run tests
+
+commit 833fc345145e0e04298e835342ea266b05e9539d
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Fri Jan 22 21:03:00 2021 -0800
+
+    return
+
+commit 068a25303cf04af8de6f17ce55642e03f4572597
+Merge: b37a01f 397d755
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Fri Jan 22 20:56:12 2021 -0800
+
+    Merge branch 'master' of github.com:Donnie-Stewart/cse210A-asgtest
+
+commit b37a01ff964379366edb5026dec51a274f4382ac
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Fri Jan 22 20:56:07 2021 -0800
+
+    skip
+
+commit 397d755119dbfa4c2db5be67a4a52adc43b1e52e
+Author: sukeswan <suryakeswani@gmail.com>
+Date:   Fri Jan 22 20:36:13 2021 -0800
+
+    formatted tree output for test cases
+
+commit c99fbd6a02a50169220b699b67c6bfbe1e4e3890
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Fri Jan 22 19:03:23 2021 -0800
+
+    mostly done
+
+commit acb4fde7721ccd36e692e030ae35aec47943a43f
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Fri Jan 22 18:43:36 2021 -0800
+
+    fixed while
+
+commit c96139649a72b2e633c309b65b7265747a3846b1
+Merge: 59330f1 8f484c8
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Fri Jan 22 17:32:36 2021 -0800
+
+    Merge branch 'master' of github.com:Donnie-Stewart/cse210A-asgtest
+
+commit 59330f1594a1a585a6c8f21e863eac49e579e3c4
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Fri Jan 22 17:31:35 2021 -0800
+
+    basics to variables
+
+commit 8f484c8827e309005eb25581c40d7a717069447d
+Author: sukeswan <suryakeswani@gmail.com>
+Date:   Fri Jan 22 13:11:25 2021 -0800
+
+    testing repo
+
+commit f840079d8bb846812c9ae9d2be338f0a27f39097
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Thu Jan 21 23:17:42 2021 -0800
+
+    var and assign are close but im giving up for tonight lol
+
+commit cd29578d4e03a4cdae33e271e1bd30c58d4d2995
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Thu Jan 21 22:44:33 2021 -0800
+
+    variables with numbers after
+
+commit 88767dffcc40090a7aec8e2fcdfab4e27d7e0557
+Author: sukeswan <suryakeswani@gmail.com>
+Date:   Thu Jan 21 22:30:51 2021 -0800
+
+    commands work
+
+commit a18878135ad4bdfb39b9a0f5f6368f400209cd3c
+Author: sukeswan <suryakeswani@gmail.com>
+Date:   Thu Jan 21 15:15:48 2021 -0800
+
+    broken commands. Donnie SOS
+
+commit 0827bdf9bdad33abba70993cdfe1f5bd679e0d08
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Thu Jan 21 01:30:09 2021 -0800
+
+    not
+
+commit 2c1cefd4ed8ba6a8a75aac2de5d5d212db7491cc
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Thu Jan 21 01:02:32 2021 -0800
+
+    boolean expressions
+
+commit b466fa46872b9001bc3abcb02423784b1a40e8a7
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Thu Jan 21 00:41:18 2021 -0800
+
+    bools
+
+commit 2288b9c98b637c978994e0e97859c13c894edb98
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Wed Jan 20 23:16:05 2021 -0800
+
+    curly brackets
+
+commit 02d9b67ea263f5d6735bb657f4be028202f71969
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Wed Jan 20 23:04:26 2021 -0800
+
+    parenthesis added
+
+commit b234fee18e06d5d1a7391090090383302ed1a8cd
+Author: sukeswan <suryakeswani@gmail.com>
+Date:   Wed Jan 20 17:19:43 2021 -0800
+
+    Tokenizer updated for all tokens. Test case at bottom of file
+
+commit 8861978478bcc8b260d3d97951931d5cb4dde47b
+Author: Donnie-Stewart <52447209+Donnie-Stewart@users.noreply.github.com>
+Date:   Wed Jan 20 15:40:37 2021 -0800
+
+    Update while.py
+    
+    arith skeleton
+
+commit a1da424ec856d25fa62a3116b005960b74881d43
+Author: sukeswan <suryakeswani@gmail.com>
+Date:   Wed Jan 20 15:34:01 2021 -0800
+
+    Testing permissions
+
+commit 650e763ee0863f1faddddc84ab6300753b67b46a
+Author: dolstewa <dolstewa@ucsc.edu>
+Date:   Wed Jan 20 15:29:30 2021 -0800
+
+    first commit
+
+commit 19a62b81d0053b1c677e25b88bc73aab28878f46
+Author: Donnie-Stewart <donniestewart14@icloud.com>
+Date:   Fri Jan 15 16:42:02 2021 -0800
+
+    gitlogs
+
+commit d805701c85c985c857c6a04a8f06e058c6871512
+Author: Donnie-Stewart <donniestewart14@icloud.com>
+Date:   Fri Jan 15 16:35:32 2021 -0800
+
+    updated readme
+
+commit 9312575a2e8c4d080d6482134e3d5c01794cfd96
+Author: Donnie-Stewart <donniestewart14@icloud.com>
+Date:   Fri Jan 15 16:16:00 2021 -0800
+
+    Tests and readme
+
+commit dd077d2fcfac7795dfe86dcdf699b6e13fe96efa
+Author: Donnie-Stewart <donniestewart14@icloud.com>
+Date:   Fri Jan 15 16:09:51 2021 -0800
+
+    cleaner tests
+
+commit ea00996580fde21bd6c6e3fffd972f8f9e9cd532
+Author: Donnie-Stewart <donniestewart14@icloud.com>
+Date:   Fri Jan 15 16:03:26 2021 -0800
+
+    updated tests
+
+commit 10a0b70879263afb0a3becf9a5c9f038117d81e5
+Author: Donnie-Stewart <donniestewart14@icloud.com>
+Date:   Fri Jan 15 15:53:49 2021 -0800
+
+    ast comment
+
+commit d0813a9a500b1e72e93641b9a466009529df48f6
+Author: Donnie-Stewart <donniestewart14@icloud.com>
+Date:   Fri Jan 15 15:52:17 2021 -0800
+
+    citations
+
+commit 276b339f5d8a3c6e5598a46cc81336a1ae7ab241
+Author: Donnie-Stewart <donniestewart14@icloud.com>
+Date:   Fri Jan 15 15:34:38 2021 -0800
+
+    comments
+
+commit 3df1716e80846d6ba345769d80187c19cb840279
+Author: Donnie-Stewart <donniestewart14@icloud.com>
+Date:   Fri Jan 15 15:27:02 2021 -0800
+
+    cleaner arith
+
+commit b9316abd33ea2c0a43451248ed5266b51850ff84
+Author: Donnie-Stewart <donniestewart14@icloud.com>
+Date:   Fri Jan 15 15:17:06 2021 -0800
+
+    arith takes tests custom cases
+
+commit 2858025b18c9902a96de2f85f2c673f9054c14a7
+Author: Donnie-Stewart <donniestewart14@icloud.com>
+Date:   Fri Jan 15 00:27:58 2021 -0800
+
+    skeleton without tests
+
+commit 4e8b7a0742448cd55e3f0633bda5afa163f63e7a
+Author: Donnie-Stewart <donniestewart14@icloud.com>
+Date:   Wed Jan 13 20:09:05 2021 -0800
+
+    initial ast skeleton
+
+commit 51b24e619965898465166dda213cef9f293344d7
+Author: Sherry <sherrylin42@gmail.com>
+Date:   Fri Apr 24 20:47:44 2020 -0700
+
+    changed structures
+
+commit 912ec54c77ad3c5df41e15bab5d5f1f7cb0caf87
+Author: Sherry <sherrylin42@gmail.com>
+Date:   Sat Apr 18 09:13:08 2020 -0700
+
+    changed hard-11 back
+
+commit 185582fdfa8e77ed891b49cbad86180f76c49fa1
+Author: Sherry <sherrylin42@gmail.com>
+Date:   Fri Apr 17 19:55:19 2020 -0700
+
+    while-ss spaces
+
+commit 7ec39f8ddbea59bb2b6573c7a0a0f2f9465810be
+Author: Sherry <sherrylin42@gmail.com>
+Date:   Fri Apr 17 17:45:47 2020 -0700
+
+    fix case 11
+
+commit 6cf8dc91216ee82c030fbeedbbe69e9921a49e9c
+Merge: f0e5d17 b3866f3
+Author: Sherry <sherrylin42@gmail.com>
+Date:   Fri Apr 17 17:38:02 2020 -0700
+
+    Merge branch 'master' of https://github.com/versey-sherry/cse210A-asgtest
+    add spaces
+
+commit f0e5d17ed9006af6a5239216530d62e5b6a6d26f
+Author: Sherry <sherrylin42@gmail.com>
+Date:   Fri Apr 17 17:34:12 2020 -0700
+
+    add spaces
+
+commit b3866f35631069178168d748b328ec5360a13b98
+Merge: 706b71a 75300d0
+Author: Sherry <sherrylin42@gmail.com>
+Date:   Fri Apr 17 08:41:50 2020 -0700
+
+    Merge pull request #1 from nijssen/master
+    
+    Some fixes to the homework 2 test scripts that fix a few incorrect spaces
+
+commit 75300d0038b7771a39faa0ee484202680737e851
+Author: Thomas Nijssen <tnijssen@ucsc.edu>
+Date:   Fri Apr 17 00:07:59 2020 -0700
+
+    Removed temporary test case
+
+commit 9763544c25655a5676cd245d03b16c2d593799c0
+Author: Thomas Nijssen <tnijssen@ucsc.edu>
+Date:   Fri Apr 17 00:03:15 2020 -0700
+
+    Some fixes to the homework 2 test scripts that fix a few incorrect spaces
+
+commit 706b71ad17fc9949ca34e416b1939b19e4f8ac63
+Merge: b5a25cb d735291
+Author: Sherry <sherrylin42@gmail.com>
+Date:   Sat Mar 28 11:37:50 2020 -0700
+
+    added README
+
+commit b5a25cb799ac85611fab7ebb8ef6cdd1e30955da
+Author: Sherry <sherrylin42@gmail.com>
+Date:   Sat Mar 28 11:34:39 2020 -0700
+
+    name updating for arith
+
+commit d735291eb5f6b4c501abc7893f1c2313e71cdd59
+Author: versey-sherry <sherrylin42@gmail.com>
+Date:   Sat Mar 28 10:49:22 2020 -0700
+
+    Create README.md
+
+commit 21ec9c800ad62f875d5088e58a3c71d994c396d5
+Author: Sherry <sherrylin42@gmail.com>
+Date:   Sat Mar 28 10:29:49 2020 -0700
+
+    fixed naming
+
+commit ac967aa4b7eb2b98fef9f4efcfac21ccb18f858d
+Author: Sherry <sherrylin42@gmail.com>
+Date:   Fri Mar 27 20:55:37 2020 -0700
+
+    name changing
+
+commit ca5f499b2de70026c1d170d2010a9457511ebf43
+Author: Sherry <sherrylin42@gmail.com>
+Date:   Fri Mar 27 20:26:17 2020 -0700
+
+    done with while
+
+commit 102497cd16b478d65075fa651b71dd90e3c679fa
+Author: Sherry <sherrylin42@gmail.com>
+Date:   Thu Mar 26 13:01:14 2020 -0700
+
+    testscripts from Sohum
+
+commit b68c4c00f7fa15e614c731ae4a892dc2a4c85691
+Author: Sohum Banerjea <sohumb@gmail.com>
+Date:   Mon Jan 6 11:21:35 2020 -0800
+
+    vendoring bats
